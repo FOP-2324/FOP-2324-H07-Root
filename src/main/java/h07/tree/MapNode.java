@@ -1,7 +1,6 @@
-package h07.nodes;
+package h07.tree;
 
-import h07.MapExpression;
-import h07.Node;
+import h07.expression.MapExpression;
 
 public class MapNode implements Node {
 

@@ -1,6 +1,4 @@
-package h07.nodes;
-
-import h07.Node;
+package h07.tree;
 
 public class ConcatenationNode implements Node {
 

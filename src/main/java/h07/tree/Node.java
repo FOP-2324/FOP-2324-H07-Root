@@ -1,4 +1,4 @@
-package h07;
+package h07.tree;
 
 public interface Node {
     String evaluate();

@@ -1,7 +1,6 @@
-package h07.nodes;
+package h07.tree;
 
-import h07.Node;
-import h07.ValueExpression;
+import h07.expression.ValueExpression;
 
 public class ValueNode implements Node {
 

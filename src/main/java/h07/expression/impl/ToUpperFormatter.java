@@ -1,6 +1,6 @@
-package h07.impl;
+package h07.expression.impl;
 
-import h07.MapExpression;
+import h07.expression.MapExpression;
 
 public class ToUpperFormatter implements MapExpression {
     @Override

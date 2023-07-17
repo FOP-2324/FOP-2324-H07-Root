@@ -1,9 +1,7 @@
 package h07;
 
-import h07.nodes.ConcatenationNode;
-import h07.nodes.ConditionNode;
-import h07.nodes.MapNode;
-import h07.nodes.ValueNode;
+import h07.expression.MapExpression;
+import h07.tree.*;
 
 import java.time.LocalTime;
 
@@ -23,6 +21,10 @@ public class Log {
     int level;
 
     public Log(){
+        rootNode = generateTree();
+    }
+
+    private Node generateTree(){
         ValueNode levelNode = new ValueNode();
         levelNode.setValueExpression(() -> String.valueOf(level));
 
@@ -56,14 +58,16 @@ public class Log {
         timeNode.setValueExpression(() -> LocalTime.now().toString());
 
         ConcatenationNode concatenationNode1 = new ConcatenationNode(timeNode, concatenationNode0);
-        rootNode = concatenationNode1;
+        return concatenationNode1;
     }
 
-
-
-    void log(int level, String message){
+    private String format(int level, String message){
         this.message = message;
         this.level = level;
-        System.out.println(rootNode.evaluate());
+        return rootNode.evaluate();
+    }
+
+    public void log(int level, String message){
+        System.out.println(format(level, message));
     }
 }
