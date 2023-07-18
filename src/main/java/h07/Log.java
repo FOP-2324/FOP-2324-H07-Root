@@ -6,13 +6,14 @@ import h07.tree.*;
 import java.time.LocalTime;
 
 public class Log {
-    private static final String ANSI_RESET = "\u001B[0m";
-    private static final String ANSI_BLUE = "\u001B[34m";
-    private static final String ANSI_YELLOW = "\u001B[33m";
-    private static final String ANSI_RED = "\u001B[31m";
+    private static final char ANSI_ESCAPE = 0x1b;
+    private static final String ANSI_RESET = "[0m";
+    private static final String ANSI_BLUE = "[34m";
+    private static final String ANSI_YELLOW = "[33m";
+    private static final String ANSI_RED = "[31m";
 
     public static MapExpression createColorExpression(String ansiColor){
-        return string -> ansiColor + string + ANSI_RESET;
+        return string -> ANSI_ESCAPE + ansiColor + string + ANSI_ESCAPE + ANSI_RESET;
     }
 
 
