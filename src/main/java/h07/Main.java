@@ -10,14 +10,28 @@ public class Main {
 
     private final static String TEST_STRING = "FOP for president!";
 
+    /**
+     *
+     * @return normal implementation of {@link  MapExpression}
+     */
     public static MapExpression testNormal(){
         return new ToUpperFormatter();
     }
 
+
+    /**
+     *
+     * @return lambda implementation of {@link  MapExpression}
+     */
     public static MapExpression testLambda(){
         return string -> string.toUpperCase();
     }
 
+
+    /**
+     *
+     * @return shortcut for lambda of {@link  MapExpression} using method reference
+     */
     public static MapExpression testMethodReference(){
         return String::toUpperCase;
     }
