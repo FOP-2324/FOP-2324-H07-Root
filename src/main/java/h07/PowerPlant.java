@@ -33,7 +33,7 @@ public class PowerPlant {
                 log.log(6, reactor.toString() + ": Overpowerd!");
             }
 
-            if(reactor.needMaintenance()){
+            if(reactor.needMaintenance(t)){
                 log.log(3, reactor.toString() + ": Needs maintenance!");
             }
 

@@ -6,13 +6,11 @@ public class Reactor {
     static final double THRESHOLD = 0.05;
 
     final int id;
-    Random random;
     final PowerFunction powerFunction;
 
 
-    public Reactor(int id, Random random, PowerFunction powerFunction){
+    public Reactor(int id, PowerFunction powerFunction){
         this.id = id;
-        this.random = random;
         this.powerFunction = powerFunction;
     }
 
@@ -25,12 +23,12 @@ public class Reactor {
         return powerFunction.get(t);
     }
 
-    boolean needMaintenance(){
-        return random.nextDouble() < THRESHOLD;
+    boolean needMaintenance(double t){
+        return (new Random((toString() + powerFunction.get(t) + t).hashCode())).nextDouble() < THRESHOLD;
     }
 
     public static Reactor generate(int id, Random random){
-        return new Reactor(id, new Random(random.nextLong(Long.MAX_VALUE)), PowerFunction.generate(random));
+        return new Reactor(id, PowerFunction.generate(random));
     }
 
 
