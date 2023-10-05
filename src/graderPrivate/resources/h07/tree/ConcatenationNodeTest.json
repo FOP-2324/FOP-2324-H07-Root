@@ -1,0 +1,47 @@
+[
+  {
+    "expected": "leftright",
+    "left": "left",
+    "right": "right"
+  },
+  {
+    "expected": "texttext",
+    "left": "text",
+    "right": "text"
+  },
+  {
+    "expected": "Right NodeLeft Node",
+    "left": "Right Node",
+    "right": "Left Node"
+  },
+  {
+    "expected": "--++",
+    "left": "--",
+    "right": "++"
+  },
+  {
+    "expected": "**",
+    "left": "*",
+    "right": "*"
+  },
+  {
+    "expected": "longerString",
+    "left": "longerString",
+    "right": ""
+  },
+  {
+    "expected": "longerString",
+    "left": "",
+    "right": "longerString"
+  },
+  {
+    "expected": "a b c ",
+    "left": "a b c",
+    "right": " "
+  },
+  {
+    "expected": "",
+    "left": "",
+    "right": ""
+  }
+]

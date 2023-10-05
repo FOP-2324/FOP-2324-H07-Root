@@ -1,0 +1,26 @@
+[
+  {
+    "lowercase": "lowercase",
+    "expected": "LOWERCASE"
+  },
+  {
+    "lowercase": "string",
+    "expected": "STRING"
+  },
+  {
+    "lowercase": "lowercase String",
+    "expected": "LOWERCASE STRING"
+  },
+  {
+    "lowercase": "test",
+    "expected": "TEST"
+  },
+  {
+    "lowercase": "value",
+    "expected": "VALUE"
+  },
+  {
+    "lowercase": "small text with spaces",
+    "expected": "SMALL TEXT WITH SPACES"
+  }
+]
