@@ -10,7 +10,7 @@ public class NodeTest {
 
     @Test
     public void testDefinition() {
-        ClassReference.NODE.isCorrectlyDefined();
-        MethodReference.NODE_EVALUATE.isCorrectlyDefined();
+        ClassReference.NODE.assertCorrectlyDefined();
+        MethodReference.NODE_EVALUATE.assertCorrectlyDefined();
     }
 }

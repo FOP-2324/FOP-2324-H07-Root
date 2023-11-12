@@ -1,5 +1,6 @@
 package h07;
 
+import h07.expression.MapExpression;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -38,8 +39,8 @@ public class MainTest {
 
         String actual;
         try {
-            actual = MethodReference.MAP_EXPRESSION_MAP.invoke(Main.testLambda(), lowercase);
-        } catch (Exception e) {
+            actual = MethodReference.MAP_EXPRESSION_MAP.invoke(MapExpression.class, Main.testLambda(), lowercase);
+        } catch (Throwable e) {
             throw new RuntimeException(e);
         }
 
@@ -80,8 +81,8 @@ public class MainTest {
 
         String actual;
         try {
-            actual = MethodReference.MAP_EXPRESSION_MAP.invoke(Main.testMethodReference(), lowercase);
-        } catch (Exception e) {
+            actual = MethodReference.MAP_EXPRESSION_MAP.invoke(MapExpression.class, Main.testMethodReference(), lowercase);
+        } catch (Throwable e) {
             throw new RuntimeException(e);
         }
 

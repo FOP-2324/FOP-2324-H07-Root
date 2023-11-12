@@ -10,7 +10,7 @@ public class ConditionExpressionTest {
 
     @Test
     public void testDefinition() {
-        ClassReference.CONDITION_EXPRESSION.isCorrectlyDefined();
-        MethodReference.CONDITION_EXPRESSION_CHECK.isCorrectlyDefined();
+        ClassReference.CONDITION_EXPRESSION.assertCorrectlyDefined();
+        MethodReference.CONDITION_EXPRESSION_CHECK.assertCorrectlyDefined();
     }
 }

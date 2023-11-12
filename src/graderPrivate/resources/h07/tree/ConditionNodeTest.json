@@ -1,0 +1,19 @@
+[
+  {
+    "trueNode": "trueNode",
+    "falseNode": "falseNode",
+    "expected": false
+  },{
+  "trueNode": "trueNode",
+  "falseNode": "falseNode",
+  "expected": true
+},{
+  "trueNode": "test",
+  "falseNode": "failed",
+  "expected": true
+},{
+  "trueNode": "simple sting with spaces",
+  "falseNode": "multi space string",
+  "expected": false
+}
+]

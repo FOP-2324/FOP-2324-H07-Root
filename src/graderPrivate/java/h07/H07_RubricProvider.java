@@ -158,7 +158,7 @@ public class H07_RubricProvider implements RubricProvider {
                                 "H3.5: setConditionExpression() und evaluate() sind korrekt implementiert",
                                 JUnitTestRef.and(
                                     //TODO
-                                    JUnitTestRef.ofMethod(() -> ConditionNodeTest.class.getDeclaredMethod("testEvaluateDefault"))
+                                    JUnitTestRef.ofMethod(() -> ConditionNodeTest.class.getDeclaredMethod("testEvaluateDefault", String.class))
                                 )
                             ),
                             criterion(

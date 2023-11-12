@@ -2,6 +2,8 @@ package h07.expression.impl;
 
 import h07.ClassReference;
 import h07.MethodReference;
+import h07.expression.MapExpression;
+import h07.tree.ConditionNode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -37,7 +39,7 @@ public class ToUpperFormatterTest {
 
     @Test
     public void testDefinition() {
-        ClassReference.TO_UPPER_FORMATTER.isCorrectlyDefined();
+        ClassReference.TO_UPPER_FORMATTER.assertCorrectlyDefined();
     }
 
     @Test
@@ -46,7 +48,7 @@ public class ToUpperFormatterTest {
         String source = EXERCISE_METHOD.getOriginalSourceFragment().toString();
 
         if (!source.contains("toUpperCase()")){
-            fail(emptyContext(), r -> "Konnte toUpperCase() Aufruf nicht finden!");
+            fail(emptyContext(), r -> "Could not find call to toUpperCase()!");
         }
 
     }
@@ -59,11 +61,11 @@ public class ToUpperFormatterTest {
 
         String actual;
         try {
-            actual = MethodReference.MAP_EXPRESSION_MAP.invoke(formatterInstance, lowercase);
-        } catch (Exception e) {
+            actual = MethodReference.MAP_EXPRESSION_MAP.invoke(ToUpperFormatter.class, formatterInstance, lowercase);
+        } catch (Throwable e) {
             throw new RuntimeException(e);
         }
 
-        assertEquals(expected, actual, emptyContext(), r -> "Die Methode map liefert die falschen Werte zurück.");
+        assertEquals(expected, actual, emptyContext(), r -> "Map does not returns correct values.");
     }
 }

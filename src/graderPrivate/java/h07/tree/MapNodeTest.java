@@ -10,9 +10,9 @@ public class MapNodeTest {
 
     @Test
     public void testDefinition() {
-        ClassReference.MAP_NODE.isCorrectlyDefined();
-        MethodReference.MAP_NODE_CONSTRUCTOR.isCorrectlyDefined();
-        MethodReference.MAP_NODE_SET_MAP_EXPRESSION.isCorrectlyDefined();
+        ClassReference.MAP_NODE.assertCorrectlyDefined();
+        MethodReference.MAP_NODE_CONSTRUCTOR.assertCorrectlyDefined();
+        MethodReference.MAP_NODE_SET_MAP_EXPRESSION.assertCorrectlyDefined();
     }
 
     //TODO

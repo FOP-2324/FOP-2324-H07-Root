@@ -10,7 +10,7 @@ public class MapExpressionTest {
 
     @Test
     public void testDefinition() {
-        ClassReference.MAP_EXPRESSION.isCorrectlyDefined();
-        MethodReference.MAP_EXPRESSION_MAP.isCorrectlyDefined();
+        ClassReference.MAP_EXPRESSION.assertCorrectlyDefined();
+        MethodReference.MAP_EXPRESSION_MAP.assertCorrectlyDefined();
     }
 }

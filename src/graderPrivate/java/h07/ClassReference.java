@@ -2,7 +2,6 @@ package h07;
 
 import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.*;
 
-import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 import org.tudalgo.algoutils.tutor.general.reflections.BasicPackageLink;
 import org.tudalgo.algoutils.tutor.general.reflections.BasicTypeLink;
@@ -27,11 +26,11 @@ public class ClassReference {
 
 
     private BasicTypeLink link;
-    private String pack;
-    private String name;
-    private Link.Kind kind;
-    private BasicTypeLink[] superClasses;
-    private Modifier[] modifiers;
+    private final String pack;
+    private final String name;
+    private final Link.Kind kind;
+    private final BasicTypeLink[] superClasses;
+    private final Modifier[] modifiers;
 
     public ClassReference(String pack, String name, Link.Kind kind, BasicTypeLink... superClasses) {
         this(pack, name, kind, superClasses, new Modifier[0]);
@@ -46,12 +45,22 @@ public class ClassReference {
 
         //TODO
         try {
-            link = BasicTypeLink.of(Class.forName(pack + "." + name));
-//            BasicPackageLink.of(pack).getType(Tester.stringMatcher(name));
+//            link = BasicTypeLink.of(Class.forName(pack + "." + name));
+            BasicPackageLink.of(pack).getTypes().forEach(l -> System.out.println(l.reflection().getName()));
+            link = (BasicTypeLink) BasicPackageLink.of(pack).getType(Tests.stringMatcher(name));
         } catch (Exception e){}
     }
 
-    public void isCorrectlyDefined() {
+    public boolean isDefined() {
+        return link != null;
+    }
+
+    public void assertDefined() {
+        assertTrue(isDefined(), emptyContext(), r -> String.format("Could not find Type %s. type is not defined or could not be found.", name));
+    }
+
+    public void assertCorrectlyDefined() {
+        assertDefined();
         Context context = contextBuilder()
             .add("expected package", pack)
             .add("expected kind", kind)
@@ -62,10 +71,11 @@ public class ClassReference {
             .add("name", link.name())
             .build();
 
-        assertEquals(pack, link.reflection().getPackage().getName(), context, r -> "Package Name stimmt nicht mit dem Erwarteten überein");
-        assertEquals(kind, link.kind(), context, r -> "");
-        assertEquals(name, link.name(), context, r -> "Name der Klasse stimmt nicht mit dem erwarteten Namen überein.");
-        assertTrue(Arrays.stream(modifiers).allMatch(m -> m.is(link.modifiers())), context, r -> "Die Modifier stimmen nicht mit den Erwartungen überein.");
+        assertNotNull(link, context, r -> "Could not find class %s.");
+        assertEquals(pack, link.reflection().getPackage().getName(), context, r -> "Package name does not match expected package name.");
+        assertEquals(kind, link.kind(), context, r -> "Kind does not match expected kind.");
+        assertEquals(name, link.name(), context, r -> "The name of the Type does not match the expected name.");
+        assertTrue(Arrays.stream(modifiers).allMatch(m -> m.is(link.modifiers())), context, r -> "The modifiers of the type do not match the expected modifiers.");
     }
 
     public BasicTypeLink getLink() {

@@ -10,7 +10,7 @@ public class ValueExpressionTest {
 
     @Test
     public void testDefinition() {
-        ClassReference.VALUE_EXPRESSION.isCorrectlyDefined();
-        MethodReference.VALUE_EXPRESSION_GET.isCorrectlyDefined();
+        ClassReference.VALUE_EXPRESSION.assertCorrectlyDefined();
+        MethodReference.VALUE_EXPRESSION_GET.assertCorrectlyDefined();
     }
 }
