@@ -1,13 +1,13 @@
 package h07.tree;
 
 /**
- * Representing a node of a expression tree
+ * Represents a node of an expression tree.
  */
 public interface Node {
-
     /**
+     * Evaluates the expression represented by this node.
      *
-     * @return the evaluated expression of this node which contains the sub tree
+     * @return the result of the evaluation
      */
     String evaluate();
 }
