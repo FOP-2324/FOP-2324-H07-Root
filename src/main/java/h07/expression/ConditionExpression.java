@@ -1,14 +1,14 @@
 package h07.expression;
 
 /**
- * Representing a Mapping between {@link  String} and {@link Boolean}
+ * Represents a condition expression which checks a string to a condition.
  */
 public interface ConditionExpression {
-
     /**
-     * Evaluate a input sequence
-     * @param string input {@link String}
-     * @return the resulting transition
+     * Checks the string to a condition.
+     *
+     * @param string string to check
+     * @return {@code true} if the string satisfies the condition, {@code false} otherwise
      */
     boolean check(String string);
 }

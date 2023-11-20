@@ -3,21 +3,36 @@ package h07.tree;
 import h07.expression.ConditionExpression;
 
 /**
- * Node which represent branching under condition
+ * Represents a node which can be used to evaluate a condition. Depending on the result of the condition, the
+ * {@link #evaluate()} method will return the result of the {@code true} or {@code false} (sub)tree.
  */
 public class ConditionNode implements Node {
-
+    /**
+     * Condition which is used to evaluate the {@link #objectiveNode}.
+     */
     private ConditionExpression conditionExpression = string -> false;
+
+    /**
+     * The (sub)tree which is evaluated when the condition is {@code true}.
+     */
     private final Node trueNode;
+
+    /**
+     * The (sub)tree which is evaluated when the condition is {@code false}.
+     */
     private final Node falseNode;
 
+    /**
+     * The (sub)tree which will be evaluated by using the {@link #conditionExpression}.
+     */
     private final Node objectiveNode;
 
     /**
-     * Constructs a new {@link ConditionNode}
-     * @param objectiveNodeNode Node which is evaluated using condition
-     * @param trueNode subtree, if executions is true
-     * @param falseNode subtree, if execution is false
+     * Constructs a new {@link ConditionNode} with its (sub)tree and evaluation (sub)trees.
+     *
+     * @param objectiveNodeNode the node which will be evaluated by using the {@link #conditionExpression}
+     * @param trueNode          the (sub)tree which is evaluated when the condition is {@code true}
+     * @param falseNode         the (sub)tree which is evaluated when the condition is {@code false}
      */
     public ConditionNode(Node objectiveNodeNode, Node trueNode, Node falseNode) {
         this.objectiveNode = objectiveNodeNode;
@@ -26,8 +41,9 @@ public class ConditionNode implements Node {
     }
 
     /**
-     * Set new Condition
-     * @param conditionExpression new {@link ConditionExpression}
+     * Sets the {@link #conditionExpression} which will be used to evaluate the {@link #objectiveNode}.
+     *
+     * @param conditionExpression the new {@link #conditionExpression}
      */
     public void setConditionExpression(ConditionExpression conditionExpression) {
         this.conditionExpression = conditionExpression;

@@ -4,6 +4,9 @@ import h07.tree.ConditionNode;
 import h07.tree.Node;
 import h07.tree.ValueNode;
 
+/**
+ * Represents a maintenance log.
+ */
 public class MaintenanceLog extends Log {
 
     @Override

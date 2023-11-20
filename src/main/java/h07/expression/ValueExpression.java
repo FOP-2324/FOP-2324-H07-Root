@@ -1,11 +1,11 @@
 package h07.expression;
 
 /**
- * Representing a Value Expression
+ * Represents a value expression.
  */
 public interface ValueExpression {
-
     /**
+     * Returns the value of the expression.
      *
      * @return value of expression
      */

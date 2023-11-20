@@ -4,6 +4,9 @@ import h07.tree.*;
 
 import java.time.LocalTime;
 
+/**
+ * Represents a normal log.
+ */
 public class NormalLog extends Log{
 
     @Override
@@ -32,10 +35,10 @@ public class NormalLog extends Log{
         ConditionNode conditionNode1 = new ConditionNode(levelNode, blueNode, conditionNode0);
         conditionNode1.setConditionExpression(string -> string.equals("0") || string.equals("1"));
 
-        ValueNode seperatorNode = new ValueNode();
-        seperatorNode.setValueExpression(() -> ": ");
+        ValueNode separatorNode = new ValueNode();
+        separatorNode.setValueExpression(() -> ": ");
 
-        ConcatenationNode concatenationNode0 = new ConcatenationNode(seperatorNode, conditionNode1);
+        ConcatenationNode concatenationNode0 = new ConcatenationNode(separatorNode, conditionNode1);
 
         ValueNode timeNode = new ValueNode();
         timeNode.setValueExpression(() -> LocalTime.now().toString());
@@ -45,9 +48,7 @@ public class NormalLog extends Log{
         ValueNode newLineNode = new ValueNode();
         newLineNode.setValueExpression(() -> "\n");
 
-        ConcatenationNode concatenationNode2 = new ConcatenationNode(concatenationNode1, newLineNode);
-
-        return concatenationNode2;
+        return new ConcatenationNode(concatenationNode1, newLineNode);
     }
 
 }
