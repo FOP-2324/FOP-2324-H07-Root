@@ -24,6 +24,21 @@ public class Main {
         return new ToUpperFormatter();
     }
 
+
+    /**
+     * Returns the map expression, more formally using the constructor to create a new instance of the class.
+     *
+     * @return the normal map expression using an anonymous class to create a new instance of the class
+     */
+    public static MapExpression testAnonymous() {
+        return new MapExpression() {
+            @Override
+            public String map(String inputString) {
+                return inputString.toUpperCase();
+            }
+        };
+    }
+
     /**
      * Returns the lambda expression, more formally using the lambda expression to create a new instance of the class.
      *
@@ -49,6 +64,7 @@ public class Main {
     private static void test_h22() {
         System.out.println("H2.2: ");
         System.out.println(testNormal().map(TEST_STRING));
+        System.out.println(testAnonymous().map(TEST_STRING));
         System.out.println(testLambda().map(TEST_STRING));
         System.out.println(testMethodReference().map(TEST_STRING));
         System.out.println();
