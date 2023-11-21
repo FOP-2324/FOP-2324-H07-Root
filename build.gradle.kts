@@ -35,7 +35,9 @@ dependencies {
     implementation(libs.annotations)
     implementation(libs.algoutils.student)
     testImplementation(libs.junit.core)
+    testImplementation(libs.junit.pioneer)
     testImplementation("org.mockito:mockito-inline:5.2.0")
+    testImplementation("org.mockito:mockito-subclass:5.2.0")
 }
 
 application {
