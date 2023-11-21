@@ -1,28 +1,50 @@
 package h07.tree;
 
-import h07.ClassReference;
+import h07.FieldReference;
 import h07.H07Test;
 import h07.MethodReference;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.mockito.MockMakers;
-import org.mockito.MockSettings;
 import org.sourcegrade.jagr.api.rubric.TestForSubmission;
-import org.sourcegrade.jagr.api.testing.extension.TestCycleResolver;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSet;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSetTest;
 
+import static h07.ClassReference.CONCATENATION_NODE;
 import static org.mockito.Mockito.*;
 import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.*;
 
 @TestForSubmission
 public class ConcatenationNodeTest extends H07Test {
 
+    @BeforeEach
+    public void isDefined() {
+        CONCATENATION_NODE.assertDefined();
+    }
+
     @Test
     public void testDefinition() {
-        ClassReference.CONCATENATION_NODE.assertCorrectlyDefined();
+        CONCATENATION_NODE.assertCorrectlyDefined();
         MethodReference.CONCATENATION_NODE_CONSTRUCTOR.assertCorrectlyDefined();
+        FieldReference.CONCATENATION_NODE_LEFT.assertCorrectlyDefined();
+        FieldReference.CONCATENATION_NODE_RIGHT.assertCorrectlyDefined();
+    }
+
+    @Test
+    public void testConstructor() throws Throwable {
+
+        //Node
+        Object left = mock(CONCATENATION_NODE.getLink().reflection());
+
+        //Node
+        Object right = mock(CONCATENATION_NODE.getLink().reflection());
+
+        //ConditionNode
+        Object node = MethodReference.CONCATENATION_NODE_CONSTRUCTOR.invoke(CONCATENATION_NODE.getLink().reflection(), null, left, right);
+
+        FieldReference.CONCATENATION_NODE_LEFT.assertStoredValue(node, left, emptyContext());
+        FieldReference.CONCATENATION_NODE_RIGHT.assertStoredValue(node, right, emptyContext());
     }
 
     @ParameterizedTest
@@ -37,26 +59,32 @@ public class ConcatenationNodeTest extends H07Test {
             .add("right Node", rightNodeEvaluate)
             .build();
 
-        MockSettings settings = getSettings();
 
         //Node
-        Object left = mock(ClassReference.NODE.getLink().reflection(), settings);
-        when(MethodReference.NODE_EVALUATE.invoke(ConcatenationNode.class, left)).thenReturn(leftNodeEvaluate);
+        Object left = mock(CONCATENATION_NODE.getLink().reflection());
+        when(MethodReference.NODE_EVALUATE.invoke(CONCATENATION_NODE.getLink().reflection(), left)).thenReturn(leftNodeEvaluate);
 
         //Node
-        Object right = mock(ClassReference.NODE.getLink().reflection(), settings);
-        when(MethodReference.NODE_EVALUATE.invoke(ConcatenationNode.class, right)).thenReturn(rightNodeEvaluate);
+        Object right = mock(CONCATENATION_NODE.getLink().reflection());
+        when(MethodReference.NODE_EVALUATE.invoke(CONCATENATION_NODE.getLink().reflection(), right)).thenReturn(rightNodeEvaluate);
 
         //ConditionNode
-        Object node = MethodReference.CONCATENATION_NODE_CONSTRUCTOR.invoke(null, left, right);
+        Object node = mock(CONCATENATION_NODE.getLink().reflection(), CALLS_REAL_METHODS);
+        FieldReference.CONCATENATION_NODE_LEFT.getLink().set(node, left);
+        FieldReference.CONCATENATION_NODE_RIGHT.getLink().set(node, right);
 
-        String actual = MethodReference.NODE_EVALUATE.invoke(ConcatenationNode.class, node);
+        String actual = MethodReference.NODE_EVALUATE.invoke(CONCATENATION_NODE.getLink().reflection(), node);
 
         verify(left, atLeastOnce());
-        MethodReference.NODE_EVALUATE.invoke(ConcatenationNode.class, left);
+        MethodReference.NODE_EVALUATE.invoke(CONCATENATION_NODE.getLink().reflection(), left);
         verify(right, atLeastOnce());
-        MethodReference.NODE_EVALUATE.invoke(ConcatenationNode.class, right);
+        MethodReference.NODE_EVALUATE.invoke(CONCATENATION_NODE.getLink().reflection(), right);
 
-        assertEquals(expected, actual, context, r -> "The method evaluate() of class ConcatenationNode returns incorrect values.");
+        assertEquals(
+            expected,
+            actual,
+            context,
+            r -> "The method evaluate() of class ConcatenationNode returns incorrect values."
+        );
     }
 }

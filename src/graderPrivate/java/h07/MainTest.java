@@ -3,7 +3,6 @@ package h07;
 import h07.expression.MapExpression;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 import org.sourcegrade.jagr.api.rubric.TestForSubmission;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSet;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSetTest;
@@ -14,8 +13,6 @@ import spoon.reflect.declaration.CtElement;
 import spoon.reflect.declaration.CtMethod;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Queue;
 
 import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.*;
@@ -24,7 +21,7 @@ import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.*;
 public class MainTest {
 
     @Test
-    public void testTestNormal(){
+    public void testTestNormal() {
 
         boolean isFormatter = ClassReference.TO_UPPER_FORMATTER.getLink().reflection().isInstance(Main.testNormal());
 
@@ -60,10 +57,10 @@ public class MainTest {
         Queue<CtElement> elements = new ArrayDeque<>();
         elements.add(testLambdaCT.getBody());
 
-        while(elements.size() > 0) {
+        while (elements.size() > 0) {
 
             CtElement element = elements.poll();
-            if (element instanceof CtLambda<?>){
+            if (element instanceof CtLambda<?>) {
                 hasLambda[0] = true;
                 break;
             }
@@ -81,7 +78,8 @@ public class MainTest {
 
         String actual;
         try {
-            actual = MethodReference.MAP_EXPRESSION_MAP.invoke(MapExpression.class, Main.testMethodReference(), lowercase);
+            actual =
+                MethodReference.MAP_EXPRESSION_MAP.invoke(MapExpression.class, Main.testMethodReference(), lowercase);
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }
@@ -90,7 +88,7 @@ public class MainTest {
     }
 
     @Test
-    public void testTestMethodReference(){
+    public void testTestMethodReference() {
         CtMethod<?> testLambdaCT = ((CtClass<?>) BasicTypeLink.of(Main.class).getCtElement())
             .getMethods().stream()
             .filter((m) -> m.getSimpleName().equals("testMethodReference"))
@@ -99,6 +97,10 @@ public class MainTest {
 
         String methodBody = testLambdaCT.getBody().toString();
 
-        assertTrue(methodBody.contains("::"), emptyContext(), r -> "testMethodReference() verwendet keine Methoden-Referenz für die Rückgabe.");
+        assertTrue(
+            methodBody.contains("::"),
+            emptyContext(),
+            r -> "testMethodReference() verwendet keine Methoden-Referenz für die Rückgabe."
+        );
     }
 }

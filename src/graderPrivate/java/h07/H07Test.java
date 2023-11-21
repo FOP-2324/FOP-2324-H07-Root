@@ -9,12 +9,13 @@ import static org.mockito.Mockito.withSettings;
 
 public class H07Test {
 
-    public MockSettings getSettings(){
+    public MockSettings getSettings() {
 
         TestCycle cycle = TestCycleResolver.getTestCycle();
 
         if (cycle != null) {
-            Thread.currentThread().setContextClassLoader((ClassLoader) TestCycleResolver.getTestCycle().getClassLoader());
+            Thread.currentThread()
+                .setContextClassLoader((ClassLoader) TestCycleResolver.getTestCycle().getClassLoader());
             return withSettings().mockMaker(MockMakers.PROXY);
         }
 

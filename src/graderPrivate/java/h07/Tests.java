@@ -1,10 +1,5 @@
 package h07;
 
-import org.tudalgo.algoutils.tutor.general.match.BasicStringMatchers;
-import org.tudalgo.algoutils.tutor.general.match.Match;
-import org.tudalgo.algoutils.tutor.general.match.MatcherFactories;
-import org.tudalgo.algoutils.tutor.general.match.Stringifiable;
-
 import org.tudalgo.algoutils.tutor.general.match.*;
 
 public class Tests {
@@ -22,7 +17,8 @@ public class Tests {
             public <ST extends T> Match<ST> match(ST object) {
                 return new Match<>() {
 
-                    final double similarity = org.tudalgo.algoutils.reflect.TestUtils.similarity(object.string(), string);
+                    final double similarity =
+                        org.tudalgo.algoutils.reflect.TestUtils.similarity(object.string(), string);
 
                     @Override
                     public boolean matched() {
@@ -41,7 +37,8 @@ public class Tests {
                         } else if (!matched()) {
                             return -1;
                         }
-                        double otherSimilarity = org.tudalgo.algoutils.reflect.TestUtils.similarity(other.object().string(), string);
+                        double otherSimilarity =
+                            org.tudalgo.algoutils.reflect.TestUtils.similarity(other.object().string(), string);
                         return Double.compare(similarity, otherSimilarity);
                     }
                 };

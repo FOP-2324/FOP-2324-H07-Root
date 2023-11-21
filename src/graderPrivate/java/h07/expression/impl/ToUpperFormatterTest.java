@@ -2,8 +2,6 @@ package h07.expression.impl;
 
 import h07.ClassReference;
 import h07.MethodReference;
-import h07.expression.MapExpression;
-import h07.tree.ConditionNode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -47,7 +45,7 @@ public class ToUpperFormatterTest {
 
         String source = EXERCISE_METHOD.getOriginalSourceFragment().toString();
 
-        if (!source.contains("toUpperCase()")){
+        if (!source.contains("toUpperCase()")) {
             fail(emptyContext(), r -> "Could not find call to toUpperCase()!");
         }
 
