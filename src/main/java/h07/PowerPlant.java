@@ -59,7 +59,7 @@ public class PowerPlant {
             log.log(0, reactor.toString() + ": Power = " + reactor.getPower(t));
 
             if (reactor.getPower(t) > 0.75) {
-                log.log(6, reactor.toString() + ": Overpowerd!");
+                log.log(6, reactor.toString() + ": Overpowered!");
             }
 
             if (reactor.needMaintenance(t)) {
