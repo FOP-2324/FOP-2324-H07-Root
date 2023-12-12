@@ -83,13 +83,6 @@ public class Main {
         log.log(1, "Hallo FoPler!");
         log.log(6, "Error: Code 6 received!");
         log.log(3, "Warnung: Diese Uebung ist hiermit beendet\nOver and out!");
-
-        PowerPlant powerPlant = new PowerPlant(log, new Random(42), 10);
-
-        for (int i = 0; i < 10; i++) {
-            powerPlant.check(i / 100.0);
-            Thread.sleep(1500);
-        }
     }
 
 
