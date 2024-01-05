@@ -1,28 +1,25 @@
 package h07.tree;
 
-import h07.*;
-import h07.expression.MapExpression;
+import h07.FieldReference;
+import h07.H07Test;
+import h07.MethodReference;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.MockSettings;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.sourcegrade.jagr.api.rubric.TestForSubmission;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
-import org.tudalgo.algoutils.tutor.general.reflections.BasicTypeLink;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import static h07.ClassReference.*;
+import static h07.ClassReference.MAP_EXPRESSION;
+import static h07.ClassReference.MAP_NODE;
 import static org.mockito.Mockito.*;
 import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.*;
 
@@ -30,6 +27,40 @@ import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.*;
 public class MapNodeTest extends H07Test {
 
     private static Class<?> expression = null;
+
+    public static Stream<Arguments> provideEvaluate() {
+
+        List<Arguments> args = new ArrayList<>();
+        List<String> strings = List.of("", "non empty string", "StRiNg WitH CaPitaLiZatIOn", "hello");
+
+        List<Pair<Function<String, String>, String>> mapper = new ArrayList<>();
+        mapper.add(Pair.of(s -> s, "Identity Mapper"));
+        mapper.add(Pair.of(s -> s + s, "Repeat the string two times"));
+        mapper.add(Pair.of(s -> s + "string", "Append \"string\" to the string"));
+        mapper.add(Pair.of(s -> "string" + s, "Prepend \"string\" to the string"));
+
+        for (Pair<Function<String, String>, String> pair : mapper) {
+            //MapExpression
+            Object expression = mock(MapNodeTest.expression);
+
+            strings.forEach(s -> {
+                try {
+                    when(MethodReference.MAP_EXPRESSION_MAP.invoke(MapNodeTest.expression, expression, s)).thenAnswer(
+                        invocation -> {
+                            String argument = invocation.getArgument(0);
+                            return pair.getLeft().apply(argument);
+                        }
+                    );
+                } catch (Throwable e) {
+                    throw new RuntimeException(e);
+                }
+                args.add(Arguments.of(expression, pair.getRight(), s, pair.getLeft().apply(s)));
+            });
+
+        }
+
+        return args.stream();
+    }
 
     @BeforeEach
     public void getExpression() {
@@ -67,8 +98,14 @@ public class MapNodeTest extends H07Test {
         //MapExpression
         Object expression = FieldReference.MAP_NODE_MAP_EXPRESSION.getLink().get(mapNode);
 
-        String actual = MethodReference.MAP_EXPRESSION_MAP.invoke(MAP_EXPRESSION.getLink().reflection(), expression, testString);
-        assertEquals(testString, actual, emptyContext(), r -> "Constructor of MapNode does not set mapExpression correctly");
+        String actual =
+            MethodReference.MAP_EXPRESSION_MAP.invoke(MAP_EXPRESSION.getLink().reflection(), expression, testString);
+        assertEquals(
+            testString,
+            actual,
+            emptyContext(),
+            r -> "Constructor of MapNode does not set mapExpression correctly"
+        );
     }
 
     @Test
@@ -103,39 +140,5 @@ public class MapNodeTest extends H07Test {
 
         String actual = MethodReference.NODE_EVALUATE.invoke(MAP_NODE.getLink().reflection(), mapNode);
         assertEquals(expected, actual, context, r -> "MapNode.evaluate() does not return expected value");
-    }
-
-    public static Stream<Arguments> provideEvaluate() {
-
-        List<Arguments> args = new ArrayList<>();
-        List<String> strings = List.of("", "non empty string", "StRiNg WitH CaPitaLiZatIOn", "hello");
-
-        List<Pair<Function<String, String>, String>> mapper = new ArrayList<>();
-        mapper.add(Pair.of(s -> s, "Identity Mapper"));
-        mapper.add(Pair.of(s -> s + s, "Repeat the string two times"));
-        mapper.add(Pair.of(s -> s + "string", "Append \"string\" to the string"));
-        mapper.add(Pair.of(s -> "string" + s, "Prepend \"string\" to the string"));
-
-        for (Pair<Function<String, String>, String> pair : mapper) {
-            //MapExpression
-            Object expression = mock(MapNodeTest.expression);
-
-            strings.forEach(s -> {
-                try {
-                    when(MethodReference.MAP_EXPRESSION_MAP.invoke(MapNodeTest.expression, expression, s)).thenAnswer(
-                        invocation -> {
-                            String argument = invocation.getArgument(0);
-                            return pair.getLeft().apply(argument);
-                        }
-                    );
-                } catch (Throwable e) {
-                    throw new RuntimeException(e);
-                }
-                args.add(Arguments.of(expression, pair.getRight(), s, pair.getLeft().apply(s)));
-            });
-
-        }
-
-        return args.stream();
     }
 }

@@ -1,17 +1,19 @@
 package h07.tree;
 
-import h07.ClassReference;
-import h07.FieldReference;
 import h07.H07Test;
-import h07.MethodReference;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.MockMakers;
 import org.mockito.MockSettings;
 import org.sourcegrade.jagr.api.rubric.TestForSubmission;
 
-import static h07.ClassReference.*;
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
+import static h07.ClassReference.VALUE_EXPRESSION;
+import static h07.ClassReference.VALUE_NODE;
 import static h07.FieldReference.VALUE_NODE_EXPRESSION;
 import static h07.MethodReference.*;
 import static org.mockito.Mockito.*;
@@ -59,9 +61,8 @@ public class ValueNodeTest extends H07Test {
     @ParameterizedTest
     @ValueSource(strings = {"", "testString", "non empty string", "CaPitaLiZeD"})
     public void testEvaluate(String testString) throws Throwable {
-
         //ValueNode
-        Object node = mock(VALUE_NODE.getLink().reflection(), CALLS_REAL_METHODS);
+        Object node = mock(VALUE_NODE.getLink().reflection(), withSettings().mockMaker(MockMakers.INLINE).defaultAnswer(CALLS_REAL_METHODS));
 
         //ValueExpression
         Object expression = mock(ValueNodeTest.expression);

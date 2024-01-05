@@ -22,7 +22,7 @@ public class ToUpperFormatterTest {
     private CtMethod<?> EXERCISE_METHOD;
 
     @BeforeEach
-    public void setup() throws Exception {
+    public void setup() throws Throwable {
 
         BasicTypeLink formatter = ClassReference.TO_UPPER_FORMATTER.getLink();
 

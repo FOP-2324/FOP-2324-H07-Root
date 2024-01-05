@@ -80,7 +80,8 @@ public class H07_RubricProvider implements RubricProvider {
                                         "testTestLambda",
                                         JsonParameterSet.class
                                     )),
-                                    JUnitTestRef.ofMethod(() -> MainTest.class.getDeclaredMethod("testTestMethodReference")),
+                                    JUnitTestRef.ofMethod(() -> MainTest.class.getDeclaredMethod(
+                                        "testTestMethodReference")),
                                     JUnitTestRef.ofMethod(() -> MainTest.class.getDeclaredMethod(
                                         "testTestMethodReference",
                                         JsonParameterSet.class
@@ -103,7 +104,8 @@ public class H07_RubricProvider implements RubricProvider {
                         .addChildCriteria(
                             criterion(
                                 "H3.2: Konstruktor ist korrekt implementiert",
-                                JUnitTestRef.ofMethod(() -> ConcatenationNodeTest.class.getDeclaredMethod("testConstructor"))
+                                JUnitTestRef.ofMethod(() -> ConcatenationNodeTest.class.getDeclaredMethod(
+                                    "testConstructor"))
                             ),
                             criterion(
                                 "H3.2: evaluate() ist korrekt implementiert",
@@ -126,12 +128,13 @@ public class H07_RubricProvider implements RubricProvider {
                         .addChildCriteria(
                             criterion(
                                 "H3.3: Konstruktor ist korrekt implementiert",
-                                JUnitTestRef.ofMethod(() -> ValueNodeTest.class.getDeclaredMethod("testEvaluateDefault"))
+                                JUnitTestRef.ofMethod(() -> ValueNodeTest.class.getDeclaredMethod(
+                                    "testEvaluateDefault"))
                             ),
                             criterion(
                                 "H3.3: setValueExpression() ist korrekt implementiert",
                                 JUnitTestRef.ofMethod(() -> ValueNodeTest.class.getDeclaredMethod(
-                                        "testEvaluate", String.class))
+                                    "testEvaluate", String.class))
                             ),
                             criterion(
                                 "H3.3 evaluate() ist korrekt implementiert",
@@ -153,11 +156,20 @@ public class H07_RubricProvider implements RubricProvider {
                         .addChildCriteria(
                             criterion(
                                 "H3.4: Konstruktor ist korrekt implementiert",
-                                JUnitTestRef.ofMethod(() -> MapNodeTest.class.getDeclaredMethod("testConstructor", String.class))
+                                JUnitTestRef.ofMethod(() -> MapNodeTest.class.getDeclaredMethod(
+                                    "testConstructor",
+                                    String.class
+                                ))
                             ),
                             criterion(
                                 "H3.4: evaluate() ist korrekt implementiert",
-                                JUnitTestRef.ofMethod(() -> MapNodeTest.class.getDeclaredMethod("testEvaluate", Object.class, String.class, String.class, String.class))
+                                JUnitTestRef.ofMethod(() -> MapNodeTest.class.getDeclaredMethod(
+                                    "testEvaluate",
+                                    Object.class,
+                                    String.class,
+                                    String.class,
+                                    String.class
+                                ))
                             ),
                             criterion(
                                 "H3.4: setMapExpression() ist korrekt implementiert",
@@ -178,16 +190,22 @@ public class H07_RubricProvider implements RubricProvider {
                                 "H3.5: Konstruktor ist korrekt implementiert",
                                 JUnitTestRef.ofMethod(() -> ConditionNodeTest.class.getDeclaredMethod(
                                     "testConstructor",
-                                        String.class
+                                    String.class
                                 ))
                             ),
                             criterion(
                                 "H3.5: evaluate() ist korrekt implementiert",
-                                JUnitTestRef.ofMethod(() -> ConditionNodeTest.class.getDeclaredMethod("testEvaluate", JsonParameterSet.class))
+                                JUnitTestRef.ofMethod(() -> ConditionNodeTest.class.getDeclaredMethod(
+                                    "testEvaluate",
+                                    JsonParameterSet.class
+                                ))
                             ),
                             criterion(
                                 "H3.5: setConditionExpression() sind korrekt implementiert",
-                                JUnitTestRef.ofMethod(() -> ConditionNodeTest.class.getDeclaredMethod("testConstructor", String.class))
+                                JUnitTestRef.ofMethod(() -> ConditionNodeTest.class.getDeclaredMethod(
+                                    "testConstructor",
+                                    String.class
+                                ))
                             ),
                             criterion(
                                 "H3.5: ConditionNode ist korrekt definiert",
@@ -208,11 +226,16 @@ public class H07_RubricProvider implements RubricProvider {
                         .addChildCriteria(
                             criterion(
                                 "H4.1: Ansi wird korrekt in den String eingebettet (Farbe und Escape-Sequenz)",
-                                JUnitTestRef.ofMethod(() -> LogTest.class.getDeclaredMethod("testCreateColorExpression", String.class, String.class))
+                                JUnitTestRef.ofMethod(() -> LogTest.class.getDeclaredMethod(
+                                    "testCreateColorExpression",
+                                    String.class,
+                                    String.class
+                                ))
                             ),
                             criterion(
                                 "H4.1: Die verbildliche Anforderung wird eingehalten.",
-                                JUnitTestRef.ofMethod(() -> LogTest.class.getDeclaredMethod("testCreateColorExpressionRequirements")),
+                                JUnitTestRef.ofMethod(() -> LogTest.class.getDeclaredMethod(
+                                    "testCreateColorExpressionRequirements")),
                                 -1
                             )
                         )
@@ -223,7 +246,12 @@ public class H07_RubricProvider implements RubricProvider {
                         .addChildCriteria(
                             criterion(
                                 "H4.2: format() ruft evaluate korrekt auf und setzt Variablen korrekt",
-                                JUnitTestRef.ofMethod(() -> LogTest.class.getDeclaredMethod("testFormat", int.class, String.class, String.class))
+                                JUnitTestRef.ofMethod(() -> LogTest.class.getDeclaredMethod(
+                                    "testFormat",
+                                    int.class,
+                                    String.class,
+                                    String.class
+                                ))
                             )
                         )
                         .build(),
@@ -231,9 +259,25 @@ public class H07_RubricProvider implements RubricProvider {
                         .shortDescription("H4.3: Formatierung realisieren 1")
                         .addChildCriteria(
                             criterion(
-                                "H4.3: TODO",
-                                JUnitTestRef.and(
-                                )
+                                "H4.3: Die von der zurück gelieferte Node formatierte Text beginnt mit der aktuellen " +
+                                        "Zeit. Darauf folgt ein Doppelpunkt und ein Leerzeichen",
+                                JUnitTestRef.ofMethod(() -> NormalLogTest.class.getDeclaredMethod(
+                                    "testGenerateTree_time", long.class))
+                            ),
+                            criterion(
+                                "H4.3: Die von der zurück gelieferte Node formatierte Text besitzt eine korrekte " +
+                                        "Färbung.",
+                                JUnitTestRef.ofMethod(() -> NormalLogTest.class.getDeclaredMethod(
+                                    "testGenerateTree_color",
+                                    int.class
+                                )),
+                                2
+                            ),
+                            criterion(
+                                "H4.3: Die von der zurück gelieferte Node formatierte Text besitzt \";\" statt Zeilen" +
+                                        " umbrüchen. ",
+                                JUnitTestRef.ofMethod(() -> NormalLogTest.class.getDeclaredMethod(
+                                    "testGenerateTree_newLine"))
                             )
                         )
                         .build(),
@@ -241,9 +285,22 @@ public class H07_RubricProvider implements RubricProvider {
                         .shortDescription("H4.4: Formatierung realisieren 2")
                         .addChildCriteria(
                             criterion(
-                                "H4.4: TODO",
-                                JUnitTestRef.and(
-                                )
+                                "H4.4: Nachrichten mit level 3 werden angezeigt.",
+                                JUnitTestRef.ofMethod(() -> MaintenanceLogTest.class.getDeclaredMethod(
+                                    "testGenerateTree_Level_Logged"))
+                            ),
+                            criterion(
+                                "H4.4: Nachrichten mit anderen leveln als 3 werden nicht angezeigt.",
+                                JUnitTestRef.ofMethod(() -> MaintenanceLogTest.class.getDeclaredMethod(
+                                    "testGenerateTree_Level_unLogged",
+                                    int.class
+                                ))
+                            ),
+                            criterion(
+                                "H4.4: Die Formatierung der Nachricht ist korrekt.",
+                                JUnitTestRef.ofMethod(() -> MaintenanceLogTest.class.getDeclaredMethod(
+                                    "testGenerateTree_Formatting")),
+                                2
                             )
                         )
                         .build()
@@ -254,18 +311,24 @@ public class H07_RubricProvider implements RubricProvider {
                 .addChildCriteria(
                     criterion(
                         "H5: Aktuelle Leistung wird korrekt ausgegeben",
-                        JUnitTestRef.and(
-                        )
+                        JUnitTestRef.ofMethod(() -> PowerPlantTest.class.getDeclaredMethod(
+                            "testCheck_power",
+                            int.class
+                        ))
                     ),
                     criterion(
                         "H5: Overpowerd-Alarm wird korrekt ausgegeben",
-                        JUnitTestRef.and(
-                        )
+                        JUnitTestRef.ofMethod(() -> PowerPlantTest.class.getDeclaredMethod(
+                            "testCheck_overPower",
+                            int.class
+                        ))
                     ),
                     criterion(
                         "H5: Maintenance-Message wird korrekt ausgegeben",
-                        JUnitTestRef.and(
-                        )
+                        JUnitTestRef.ofMethod(() -> PowerPlantTest.class.getDeclaredMethod(
+                            "testCheck_maintenance",
+                            int.class
+                        ))
                     )
                 )
                 .build()

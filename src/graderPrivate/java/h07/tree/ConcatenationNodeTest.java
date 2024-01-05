@@ -41,7 +41,11 @@ public class ConcatenationNodeTest extends H07Test {
         Object right = mock(CONCATENATION_NODE.getLink().reflection());
 
         //ConditionNode
-        Object node = MethodReference.CONCATENATION_NODE_CONSTRUCTOR.invoke(CONCATENATION_NODE.getLink().reflection(), null, left, right);
+        Object node = MethodReference.CONCATENATION_NODE_CONSTRUCTOR.invoke(CONCATENATION_NODE.getLink().reflection(),
+            null,
+            left,
+            right
+        );
 
         FieldReference.CONCATENATION_NODE_LEFT.assertStoredValue(node, left, emptyContext());
         FieldReference.CONCATENATION_NODE_RIGHT.assertStoredValue(node, right, emptyContext());
@@ -62,11 +66,13 @@ public class ConcatenationNodeTest extends H07Test {
 
         //Node
         Object left = mock(CONCATENATION_NODE.getLink().reflection());
-        when(MethodReference.NODE_EVALUATE.invoke(CONCATENATION_NODE.getLink().reflection(), left)).thenReturn(leftNodeEvaluate);
+        when(MethodReference.NODE_EVALUATE.invoke(CONCATENATION_NODE.getLink().reflection(), left)).thenReturn(
+            leftNodeEvaluate);
 
         //Node
         Object right = mock(CONCATENATION_NODE.getLink().reflection());
-        when(MethodReference.NODE_EVALUATE.invoke(CONCATENATION_NODE.getLink().reflection(), right)).thenReturn(rightNodeEvaluate);
+        when(MethodReference.NODE_EVALUATE.invoke(CONCATENATION_NODE.getLink().reflection(), right)).thenReturn(
+            rightNodeEvaluate);
 
         //ConditionNode
         Object node = mock(CONCATENATION_NODE.getLink().reflection(), CALLS_REAL_METHODS);

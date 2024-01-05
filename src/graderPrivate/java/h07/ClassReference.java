@@ -76,7 +76,6 @@ public class ClassReference {
         this.modifiers = modifiers;
 
         try {
-            BasicPackageLink.of(pack).getTypes().forEach(l -> System.out.println(l.reflection().getName()));
             link = (BasicTypeLink) BasicPackageLink.of(pack).getType(Tests.stringMatcher(name));
         } catch (Exception ignored) {
         }
@@ -110,7 +109,7 @@ public class ClassReference {
             .add("name", link.name())
             .build();
 
-        assertNotNull(link, context, r -> "Could not find class %s.");
+        assertNotNull(link, context, r -> "Could not find class %s.".formatted(name));
         assertEquals(
             pack,
             link.reflection().getPackage().getName(),
@@ -124,6 +123,17 @@ public class ClassReference {
             context,
             r -> "The modifiers of the type do not match the expected modifiers."
         );
+    }
+
+    public void assertNamedCorrectly() {
+        assertDefined();
+        Context context = contextBuilder()
+            .add("expected name", name)
+            .add("name", link.name())
+            .build();
+
+        assertNotNull(link, context, r -> "Could not find class %s.".formatted(name));
+        assertEquals(name, link.name(), context, r -> "The name of the Type does not match the expected name.");
     }
 
     public BasicTypeLink getLink() {

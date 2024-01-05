@@ -22,7 +22,6 @@ public class MainTest {
 
     @Test
     public void testTestNormal() {
-
         boolean isFormatter = ClassReference.TO_UPPER_FORMATTER.getLink().reflection().isInstance(Main.testNormal());
 
         assertTrue(isFormatter, emptyContext(), r -> "testNormal() liefert keine Instanz von ToUpperFormatter zurück.");

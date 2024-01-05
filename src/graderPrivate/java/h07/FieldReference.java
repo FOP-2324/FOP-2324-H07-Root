@@ -1,12 +1,8 @@
 package h07;
 
-import h07.expression.MapExpression;
-import h07.tree.MapNode;
 import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
-import org.tudalgo.algoutils.tutor.general.assertions.Assertions3;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 import org.tudalgo.algoutils.tutor.general.reflections.BasicFieldLink;
-import org.tudalgo.algoutils.tutor.general.reflections.BasicTypeLink;
 import org.tudalgo.algoutils.tutor.general.reflections.Modifier;
 
 import java.util.Arrays;
@@ -21,14 +17,16 @@ public class FieldReference {
         new FieldReference("left", ClassReference.CONCATENATION_NODE, new Modifier[]{Modifier.PRIVATE}, NODE);
     public static final FieldReference CONCATENATION_NODE_RIGHT =
         new FieldReference("right", ClassReference.CONCATENATION_NODE, new Modifier[]{Modifier.PRIVATE}, NODE);
-    public static final FieldReference VALUE_NODE_EXPRESSION = new FieldReference("expression",
+    public static final FieldReference VALUE_NODE_EXPRESSION = new FieldReference(
+        "expression",
         ClassReference.VALUE_NODE,
         new Modifier[]{Modifier.PRIVATE},
         VALUE_EXPRESSION
     );
     public static final FieldReference MAP_NODE_NODE =
         new FieldReference("node", ClassReference.MAP_NODE, new Modifier[]{Modifier.PRIVATE}, NODE);
-    public static final FieldReference MAP_NODE_MAP_EXPRESSION = new FieldReference("mapExpression",
+    public static final FieldReference MAP_NODE_MAP_EXPRESSION = new FieldReference(
+        "mapExpression",
         ClassReference.MAP_NODE,
         new Modifier[]{Modifier.PRIVATE},
         MAP_EXPRESSION
@@ -98,19 +96,32 @@ public class FieldReference {
         assertTrue(isDefined(), context, r -> "Field is not defined or could not be found.");
     }
 
-    public void assertCorrectlyDefined() {
+    public void assertNamedCorrectly() {
         assertDefined();
         Context context = contextBuilder()
             .add("in class", declaringClass.getName())
             .add("expected name", name)
-            .add("expected Type", type.getName())
-            .add("expected modifier", Arrays.stream(modifiers).map(Modifier::keyword).collect(Collectors.joining(", ")))
-            .add("type", link.reflection().getType().getName())
             .add("name", link.name())
             .build();
 
         assertEquals(name, link.name(), context, r -> "The name of the field does not match the expected name.");
-        assertEquals(type, link.staticType().reflection(), context, r -> "The static type of the field does not match the expected Type");
+    }
+
+    public void assertCorrectlyDefined() {
+        assertDefined();
+        Context context = contextBuilder()
+            .add("in class", declaringClass.getName())
+            .add("expected Type", type.getName())
+            .add("expected modifier", Arrays.stream(modifiers).map(Modifier::keyword).collect(Collectors.joining(", ")))
+            .add("type", link.reflection().getType().getName())
+            .build();
+
+        assertEquals(
+            type,
+            link.staticType().reflection(),
+            context,
+            r -> "The static type of the field does not match the expected Type"
+        );
         assertTrue(
             Arrays.stream(modifiers).allMatch(m -> m.is(link.modifiers())),
             context,
@@ -124,7 +135,8 @@ public class FieldReference {
             expectedValue,
             link.get(instance),
             context,
-            r -> String.format("Value stored in %s.%s does not match expected",
+            r -> String.format(
+                "Value stored in %s.%s does not match expected",
                 link.reflection().getDeclaringClass().getName(),
                 link.name()
             )
@@ -134,7 +146,14 @@ public class FieldReference {
     public void assertNotNull(Object instance, Context context) {
         assertDefined();
 
-        Assertions2.assertNotNull(link.get(instance), context, r -> String.format("Value stored in %s.%s is Null", link.reflection().getDeclaringClass().getName(), link.name()));
+        Assertions2.assertNotNull(
+            link.get(instance),
+            context,
+            r -> String.format("Value stored in %s.%s is Null",
+                link.reflection().getDeclaringClass().getName(),
+                link.name()
+            )
+        );
     }
 
     public BasicFieldLink getLink() {
