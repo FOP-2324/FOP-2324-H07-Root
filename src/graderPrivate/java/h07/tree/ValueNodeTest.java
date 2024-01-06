@@ -69,7 +69,10 @@ public class ValueNodeTest extends H07Test {
     @ValueSource(strings = {"", "testString", "non empty string", "CaPitaLiZeD"})
     public void testEvaluate(String testString) throws Throwable {
         //ValueNode
-        Object node = mock(VALUE_NODE.getLink().reflection(), withSettings().mockMaker(MockMakers.INLINE).defaultAnswer(CALLS_REAL_METHODS));
+        Object node = mock(
+            VALUE_NODE.getLink().reflection(),
+            withSettings().mockMaker(MockMakers.INLINE).defaultAnswer(CALLS_REAL_METHODS)
+        );
 
         //ValueExpression
         Object expression = mock(ValueNodeTest.expression);

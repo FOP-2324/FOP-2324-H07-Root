@@ -33,14 +33,15 @@ public class H07_RubricProvider implements RubricProvider {
                         "H1.3: ConditionExpression ist vollständig korrekt definiert.",
                         JUnitTestRef.ofMethod(() -> ConditionExpressionTest.class.getDeclaredMethod("testDefinition"))
                     ),
-                    criterion("H1: Alle Typen und Methoden wurden korrekt benannt.",
-                            JUnitTestRef.and(
-                                JUnitTestRef.ofMethod(() -> ConditionExpressionTest.class.getDeclaredMethod("testNaming")),
-                                JUnitTestRef.ofMethod(() -> MapExpressionTest.class.getDeclaredMethod("testNaming")),
-                                JUnitTestRef.ofMethod(() -> ValueExpressionTest.class.getDeclaredMethod("testNaming"))
-                            ),
+                    criterion(
+                        "H1: Alle Typen und Methoden wurden korrekt benannt.",
+                        JUnitTestRef.and(
+                            JUnitTestRef.ofMethod(() -> ConditionExpressionTest.class.getDeclaredMethod("testNaming")),
+                            JUnitTestRef.ofMethod(() -> MapExpressionTest.class.getDeclaredMethod("testNaming")),
+                            JUnitTestRef.ofMethod(() -> ValueExpressionTest.class.getDeclaredMethod("testNaming"))
+                        ),
                         -1
-                        )
+                    )
                 )
                 .minPoints(0)
                 .build(),
@@ -68,7 +69,7 @@ public class H07_RubricProvider implements RubricProvider {
                                         "testDefinition")),
                                     JUnitTestRef.ofMethod(() -> ToUpperFormatterTest.class.getDeclaredMethod(
                                         "testNaming"))
-                                    ),
+                                ),
                                 -1
                             )
                         )
@@ -85,7 +86,10 @@ public class H07_RubricProvider implements RubricProvider {
                                 "H2.2: Anonyme Klasse wird korrekt getestet",
                                 JUnitTestRef.and(
                                     JUnitTestRef.ofMethod(() -> MainTest.class.getDeclaredMethod("testTestAnonymous")),
-                                    JUnitTestRef.ofMethod(() -> MainTest.class.getDeclaredMethod("testTestAnonymous", JsonParameterSet.class))
+                                    JUnitTestRef.ofMethod(() -> MainTest.class.getDeclaredMethod(
+                                        "testTestAnonymous",
+                                        JsonParameterSet.class
+                                    ))
                                 )
                             ),
                             criterion(
@@ -232,7 +236,8 @@ public class H07_RubricProvider implements RubricProvider {
                         )
                         .minPoints(0)
                         .build(),
-                    criterion("H3: Alle Typen und Methoden wurden korrekt benannt.",
+                    criterion(
+                        "H3: Alle Typen und Methoden wurden korrekt benannt.",
                         JUnitTestRef.and(
                             JUnitTestRef.ofMethod(() -> NodeTest.class.getDeclaredMethod("testNaming")),
                             JUnitTestRef.ofMethod(() -> ConcatenationNodeTest.class.getDeclaredMethod("testNaming")),
@@ -286,13 +291,13 @@ public class H07_RubricProvider implements RubricProvider {
                         .addChildCriteria(
                             criterion(
                                 "H4.3: Die von der zurück gelieferte Node formatierte Text beginnt mit der aktuellen " +
-                                        "Zeit. Darauf folgt ein Doppelpunkt und ein Leerzeichen",
+                                    "Zeit. Darauf folgt ein Doppelpunkt und ein Leerzeichen",
                                 JUnitTestRef.ofMethod(() -> NormalLogTest.class.getDeclaredMethod(
                                     "testGenerateTree_time", long.class))
                             ),
                             criterion(
                                 "H4.3: Die von der zurück gelieferte Node formatierte Text besitzt eine korrekte " +
-                                        "Färbung.",
+                                    "Färbung.",
                                 JUnitTestRef.ofMethod(() -> NormalLogTest.class.getDeclaredMethod(
                                     "testGenerateTree_color",
                                     int.class
@@ -301,7 +306,7 @@ public class H07_RubricProvider implements RubricProvider {
                             ),
                             criterion(
                                 "H4.3: Die von der zurück gelieferte Node formatierte Text besitzt \";\" statt Zeilen" +
-                                        " umbrüchen. ",
+                                    " umbrüchen. ",
                                 JUnitTestRef.ofMethod(() -> NormalLogTest.class.getDeclaredMethod(
                                     "testGenerateTree_newLine"))
                             )

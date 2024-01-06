@@ -67,7 +67,10 @@ public class ToUpperFormatterTest {
         String actual;
         try {
             assertNotNull(EXERCISE_METHOD, emptyContext(), r -> "Could not find method map().");
-            actual = MethodReference.MAP_EXPRESSION_MAP.invoke(ClassReference.TO_UPPER_FORMATTER.getLink().reflection(), formatterInstance, lowercase);
+            actual = MethodReference.MAP_EXPRESSION_MAP.invoke(ClassReference.TO_UPPER_FORMATTER.getLink().reflection(),
+                formatterInstance,
+                lowercase
+            );
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }

@@ -52,10 +52,15 @@ public class LogTest extends H07Test {
 
         MethodLink link = BasicTypeLink.of(Log.class).getMethod(Tests.stringMatcher("createColorExpression"));
 
-        assertNotNull(link, emptyContext(), r -> "Could not find method Body of createColorExpression(). Method is probably unimplemented");
+        assertNotNull(
+            link,
+            emptyContext(),
+            r -> "Could not find method Body of createColorExpression(). Method is probably unimplemented"
+        );
 
         Object expression = link.invokeStatic(ansiColor);
-        String actual = MethodReference.MAP_EXPRESSION_MAP.invoke(ClassReference.MAP_EXPRESSION.getLink().reflection(),
+        String actual = MethodReference.MAP_EXPRESSION_MAP.invoke(
+            ClassReference.MAP_EXPRESSION.getLink().reflection(),
             expression,
             input
         );
@@ -75,7 +80,11 @@ public class LogTest extends H07Test {
         BasicMethodLink link = ((BasicMethodLink) BasicTypeLink.of(Log.class)
             .getMethod(Tests.stringMatcher("createColorExpression")));
 
-        assertNotNull(link, emptyContext(), r -> "Could not find method Body of createColorExpression(). Method is probably unimplemented");
+        assertNotNull(
+            link,
+            emptyContext(),
+            r -> "Could not find method Body of createColorExpression(). Method is probably unimplemented"
+        );
 
         CtMethod method = link.getCtElement();
 
@@ -107,7 +116,11 @@ public class LogTest extends H07Test {
 
         MethodLink link = BasicTypeLink.of(Log.class).getMethod(Tests.stringMatcher("format"));
 
-        assertNotNull(link, emptyContext(), r -> "Could not find method Body of format(). Method is probably unimplemented");
+        assertNotNull(
+            link,
+            emptyContext(),
+            r -> "Could not find method Body of format(). Method is probably unimplemented"
+        );
 
         String actual = link.invoke(logger, level, message);
 

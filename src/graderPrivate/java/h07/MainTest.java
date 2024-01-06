@@ -25,7 +25,8 @@ public class MainTest {
 
     @Test
     public void testTestNormal() throws Throwable {
-        boolean isFormatter = ClassReference.TO_UPPER_FORMATTER.getLink().reflection().isInstance(invokeMethodInMain("testNormal"));
+        boolean isFormatter =
+            ClassReference.TO_UPPER_FORMATTER.getLink().reflection().isInstance(invokeMethodInMain("testNormal"));
 
         assertTrue(isFormatter, emptyContext(), r -> "testNormal() does not return an instance of ToUpperFormatter.");
     }
@@ -38,7 +39,10 @@ public class MainTest {
 
         String actual;
         try {
-            actual = MethodReference.MAP_EXPRESSION_MAP.invoke(ClassReference.MAP_EXPRESSION.getLink().reflection(), invokeMethodInMain("testLambda"), lowercase);
+            actual = MethodReference.MAP_EXPRESSION_MAP.invoke(ClassReference.MAP_EXPRESSION.getLink().reflection(),
+                invokeMethodInMain("testLambda"),
+                lowercase
+            );
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }
@@ -54,7 +58,11 @@ public class MainTest {
             .findFirst()
             .orElse(null);
 
-        assertNotNull(testLambdaCT, emptyContext(), r -> "Could not find method Body of testLambda(). Method is probably unimplemented");
+        assertNotNull(
+            testLambdaCT,
+            emptyContext(),
+            r -> "Could not find method Body of testLambda(). Method is probably unimplemented"
+        );
 
         boolean[] hasLambda = new boolean[1];
 
@@ -71,7 +79,11 @@ public class MainTest {
             elements.addAll(element.getDirectChildren());
         }
 
-        assertTrue(hasLambda[0], emptyContext(), r -> "testLambda() does not use a lambda to create the returned values.");
+        assertTrue(
+            hasLambda[0],
+            emptyContext(),
+            r -> "testLambda() does not use a lambda to create the returned values."
+        );
     }
 
     @ParameterizedTest
@@ -83,7 +95,11 @@ public class MainTest {
         String actual;
         try {
             actual =
-                MethodReference.MAP_EXPRESSION_MAP.invoke(ClassReference.MAP_EXPRESSION.getLink().reflection(), invokeMethodInMain("testMethodReference"), lowercase);
+                MethodReference.MAP_EXPRESSION_MAP.invoke(
+                    ClassReference.MAP_EXPRESSION.getLink().reflection(),
+                    invokeMethodInMain("testMethodReference"),
+                    lowercase
+                );
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }
@@ -99,7 +115,11 @@ public class MainTest {
             .findFirst()
             .orElse(null);
 
-        assertNotNull(testLambdaCT, emptyContext(), r -> "Could not find method Body of testMethodReference(). Method is probably unimplemented.");
+        assertNotNull(
+            testLambdaCT,
+            emptyContext(),
+            r -> "Could not find method Body of testMethodReference(). Method is probably unimplemented."
+        );
 
         String methodBody = testLambdaCT.getBody().toString();
 
@@ -119,7 +139,11 @@ public class MainTest {
         String actual;
         try {
             actual =
-                MethodReference.MAP_EXPRESSION_MAP.invoke(ClassReference.MAP_EXPRESSION.getLink().reflection(), invokeMethodInMain("testAnonymous"), lowercase);
+                MethodReference.MAP_EXPRESSION_MAP.invoke(
+                    ClassReference.MAP_EXPRESSION.getLink().reflection(),
+                    invokeMethodInMain("testAnonymous"),
+                    lowercase
+                );
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }
@@ -135,7 +159,11 @@ public class MainTest {
             .findFirst()
             .orElse(null);
 
-        assertNotNull(testLambdaCT, emptyContext(), r -> "Could not find method Body of testAnonymous(). Method is probably unimplemented.");
+        assertNotNull(
+            testLambdaCT,
+            emptyContext(),
+            r -> "Could not find method Body of testAnonymous(). Method is probably unimplemented."
+        );
 
         assertFalse(
             testLambdaCT.getBody().filterChildren(new TypeFilter<>(CtNewClass.class)).list().isEmpty(),
@@ -146,7 +174,11 @@ public class MainTest {
 
     public Object invokeMethodInMain(String methodName) throws Throwable {
         MethodLink link = BasicTypeLink.of(Main.class).getMethod(identical(methodName));
-        assertNotNull(link, emptyContext(), r -> "Cant find method Main.%s(). Method is probably unimplemented.".formatted(methodName));
+        assertNotNull(
+            link,
+            emptyContext(),
+            r -> "Cant find method Main.%s(). Method is probably unimplemented.".formatted(methodName)
+        );
         return link.invokeStatic();
     }
 }

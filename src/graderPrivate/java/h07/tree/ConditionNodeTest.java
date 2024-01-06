@@ -47,7 +47,8 @@ public class ConditionNodeTest extends H07Test {
         //Node
         Object falseNode = mock(NODE.getLink().reflection());
         //Node
-        Object toTest = CONDITION_NODE_CONSTRUCTOR.invoke(CONDITION_NODE.getLink().reflection(),
+        Object toTest = CONDITION_NODE_CONSTRUCTOR.invoke(
+            CONDITION_NODE.getLink().reflection(),
             null,
             objectiveNode,
             trueNode,
@@ -58,7 +59,8 @@ public class ConditionNodeTest extends H07Test {
         FieldReference.CONDITION_NODE_TRUE_NODE.assertStoredValue(toTest, trueNode, emptyContext());
         FieldReference.CONDITION_NODE_FALSE_NODE.assertStoredValue(toTest, falseNode, emptyContext());
 
-        boolean actual = CONDITION_EXPRESSION_CHECK.invoke(CONDITION_EXPRESSION.getLink().reflection(),
+        boolean actual = CONDITION_EXPRESSION_CHECK.invoke(
+            CONDITION_EXPRESSION.getLink().reflection(),
             CONDITION_NODE_CONDITION_EXPRESSION.getLink().get(toTest),
             input
         );

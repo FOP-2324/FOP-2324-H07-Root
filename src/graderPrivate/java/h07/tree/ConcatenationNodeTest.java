@@ -48,7 +48,8 @@ public class ConcatenationNodeTest extends H07Test {
         Object right = mock(NODE.getLink().reflection());
 
         //ConditionNode
-        Object node = MethodReference.CONCATENATION_NODE_CONSTRUCTOR.invoke(CONCATENATION_NODE.getLink().reflection(),
+        Object node = MethodReference.CONCATENATION_NODE_CONSTRUCTOR.invoke(
+            CONCATENATION_NODE.getLink().reflection(),
             null,
             left,
             right

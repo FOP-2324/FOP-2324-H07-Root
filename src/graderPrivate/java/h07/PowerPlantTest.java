@@ -3,7 +3,6 @@ package h07;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junitpioneer.jupiter.cartesian.CartesianTest;
 import org.junitpioneer.jupiter.params.IntRangeSource;
 import org.mockito.MockedStatic;
 import org.sourcegrade.jagr.api.rubric.TestForSubmission;
@@ -116,7 +115,10 @@ public class PowerPlantTest {
 
         assertEquals(
             (long) reactorCount / 2,
-            loggedMessages.stream().filter(message -> message.getRight().contains("Overpowerd") || message.getRight().contains("Overpowered")).count(),
+            loggedMessages.stream()
+                .filter(message -> message.getRight().contains("Overpowerd") || message.getRight()
+                    .contains("Overpowered"))
+                .count(),
             context,
             r -> "An incorrect number of overpower logs is created."
         );
@@ -127,7 +129,7 @@ public class PowerPlantTest {
                 logged ->
                     logged.getLeft() == 6
                         && (logged.getRight().equals("Reactor_" + finalI + ": Overpowerd!")
-                            || logged.getRight().equals("Reactor_" + finalI + ": Overpowered!"))
+                        || logged.getRight().equals("Reactor_" + finalI + ": Overpowered!"))
             ).count();
             assertEquals(
                 (long) i % 2,

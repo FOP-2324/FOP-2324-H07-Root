@@ -13,9 +13,6 @@ import static h07.ClassReference.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.when;
-import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.assertNotNull;
-import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.emptyContext;
 import static org.tudalgo.algoutils.tutor.general.match.BasicStringMatchers.identical;
 
 public class AdvancedLoggerTest {
@@ -46,7 +43,7 @@ public class AdvancedLoggerTest {
                 MockedConstruction<?> condition = mockConditionNode();
                 MockedConstruction<?> concatenation = mockConcatenationNode();
                 MockedConstruction<?> map = mockMapNode();
-                MockedConstruction<?> value = mockValueNode();
+                MockedConstruction<?> value = mockValueNode()
             ) {
                 codeToRun.run();
             }

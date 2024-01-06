@@ -145,7 +145,8 @@ public class MethodReference {
 
         MethodLink actual = BasicTypeLink.of(calledClass).getMethod(Tests.stringMatcher(name));
         if (actual != null) {
-            if (!Set.of(parameters).equals(actual.typeList().stream().map(TypeLink::reflection).collect(Collectors.toSet()))) {
+            if (!Set.of(parameters)
+                .equals(actual.typeList().stream().map(TypeLink::reflection).collect(Collectors.toSet()))) {
                 return null;
             }
             methodLink = actual;
@@ -303,7 +304,10 @@ public class MethodReference {
     }
 
     public <T> T invoke(Class<?> calledClass, Object instance, Object... parameter) throws Throwable {
-        Link link = assertDefined(calledClass, Arrays.stream(parameter).map(o -> o != null ? o.getClass() : null).toArray(Class[]::new));
+        Link link = assertDefined(
+            calledClass,
+            Arrays.stream(parameter).map(o -> o != null ? o.getClass() : null).toArray(Class[]::new)
+        );
         if (link instanceof MethodLink l) {
             return l.invoke(instance, parameter);
         } else if (link instanceof ConstructorLink l) {

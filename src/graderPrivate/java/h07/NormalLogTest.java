@@ -72,7 +72,8 @@ public class NormalLogTest extends AdvancedLoggerTest {
             Node generated = logger.generateTree();
             String actual = null;
             try {
-                actual = MethodReference.NODE_EVALUATE.<String>invoke(generated.getClass(), generated).replaceAll("\n", "");;
+                actual =
+                    MethodReference.NODE_EVALUATE.<String>invoke(generated.getClass(), generated).replaceAll("\n", "");
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }
