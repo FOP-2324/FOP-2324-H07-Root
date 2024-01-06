@@ -9,16 +9,12 @@ import org.mockito.MockMakers;
 import org.mockito.MockSettings;
 import org.sourcegrade.jagr.api.rubric.TestForSubmission;
 
-import java.util.Arrays;
-import java.util.stream.Collectors;
-
 import static h07.ClassReference.VALUE_EXPRESSION;
 import static h07.ClassReference.VALUE_NODE;
 import static h07.FieldReference.VALUE_NODE_EXPRESSION;
 import static h07.MethodReference.*;
 import static org.mockito.Mockito.*;
-import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.assertEquals;
-import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.emptyContext;
+import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.*;
 
 @TestForSubmission
 public class ValueNodeTest extends H07Test {
@@ -44,11 +40,22 @@ public class ValueNodeTest extends H07Test {
     }
 
     @Test
+    public void testNaming() {
+        VALUE_NODE.assertNamedCorrectly();
+        VALUE_NODE_SET_VALUE_EXPRESSION.assertNamedCorrectly();
+        VALUE_NODE_EXPRESSION.assertNamedCorrectly();
+    }
+
+    @Test
     public void testEvaluateDefault() throws Throwable {
 
         Object node = VALUE_NODE.getLink().reflection().getConstructor().newInstance();
 
-        String actual = NODE_EVALUATE.invoke(ValueNode.class, node);
+        Object defaultExpression = VALUE_NODE_EXPRESSION.getLink().get(node);
+
+        assertNotNull(defaultExpression, emptyContext(), r -> "ValueNode does not create a default ValueExpression");
+
+        String actual = NODE_EVALUATE.invoke(VALUE_NODE.getLink().reflection(), node);
 
         assertEquals(
             "",
@@ -70,7 +77,7 @@ public class ValueNodeTest extends H07Test {
 
         VALUE_NODE_EXPRESSION.getLink().set(node, expression);
 
-        String actual = NODE_EVALUATE.invoke(ValueNode.class, node);
+        String actual = NODE_EVALUATE.invoke(VALUE_NODE.getLink().reflection(), node);
 
         assertEquals(
             testString,
@@ -90,9 +97,9 @@ public class ValueNodeTest extends H07Test {
 
         //ValueExpression
         Object expression = mock(ValueNodeTest.expression, settings);
-        when(VALUE_EXPRESSION_GET.invoke(ValueNode.class, expression)).thenReturn(returnedValue);
+        when(VALUE_EXPRESSION_GET.invoke(VALUE_NODE.getLink().reflection(), expression)).thenReturn(returnedValue);
 
-        VALUE_NODE_SET_VALUE_EXPRESSION.invoke(ValueNode.class, node, expression);
+        VALUE_NODE_SET_VALUE_EXPRESSION.invoke(VALUE_NODE.getLink().reflection(), node, expression);
 
         VALUE_NODE_EXPRESSION.assertStoredValue(node, expression, emptyContext());
     }

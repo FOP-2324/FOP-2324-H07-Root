@@ -49,7 +49,6 @@ public class MethodReference {
     private final Link.Kind kind;
     private final ClassReference clazz;
     private Class<?>[] parameters;
-    private Modifier[] actualModifiers;
     private MethodLink methodLink;
     private ConstructorLink constructorLink;
 
@@ -67,11 +66,6 @@ public class MethodReference {
         try {
             constructorLink = BasicConstructorLink.of(clazz.getLink().reflection().getDeclaredConstructor(parameters));
         } catch (NoSuchMethodException ignored) {
-        }
-        if (constructorLink != null) {
-            actualModifiers = Arrays.stream(Modifier.values())
-                .filter(m -> m.is(constructorLink.modifiers()))
-                .toArray(Modifier[]::new);
         }
     }
 
@@ -99,11 +93,6 @@ public class MethodReference {
             );
         } catch (NoSuchMethodException ignored) {
         }
-        if (constructorLink != null) {
-            actualModifiers = Arrays.stream(Modifier.values())
-                .filter(m -> m.is(constructorLink.modifiers()))
-                .toArray(Modifier[]::new);
-        }
     }
 
     public MethodReference(ClassReference clazz, String name, Modifier[] expectedModifiers, Class<?> returnValue,
@@ -119,8 +108,6 @@ public class MethodReference {
             return;
         }
         methodLink = clazz.getLink().getMethod(Tests.stringMatcher(name));
-        actualModifiers =
-            Arrays.stream(Modifier.values()).filter(m -> m.is(methodLink.modifiers())).toArray(Modifier[]::new);
     }
 
     public MethodReference(ClassReference clazz, String name, Modifier[] expectedModifiers, Class<?> returnValue,
@@ -141,8 +128,52 @@ public class MethodReference {
         }
         this.parameters = Arrays.stream(parameters).map(p -> p.getLink().reflection()).toArray(Class[]::new);
         methodLink = clazz.getLink().getMethod(Tests.stringMatcher(name));
-        actualModifiers =
-            Arrays.stream(Modifier.values()).filter(m -> m.is(methodLink.modifiers())).toArray(Modifier[]::new);
+
+    }
+
+    public WithModifiers getLink() {
+        return methodLink != null ? methodLink : constructorLink;
+    }
+
+    public WithModifiers getLink(Class<?> calledClass, Class<?>... parameters) {
+        if (constructorLink != null) {
+            return constructorLink;
+        }
+        if (methodLink != null) {
+            return methodLink;
+        }
+
+        MethodLink actual = BasicTypeLink.of(calledClass).getMethod(Tests.stringMatcher(name));
+        if (actual != null) {
+            if (!Set.of(parameters).equals(actual.typeList().stream().map(TypeLink::reflection).collect(Collectors.toSet()))) {
+                return null;
+            }
+            methodLink = actual;
+            return actual;
+        }
+        if (!clazz.isDefined()) {
+            return null;
+        }
+        if (isConstructor) {
+            ConstructorLink link = clazz.getLink().getConstructor(
+                Matcher.of(
+                    (c) -> {
+                        List<? extends Class<?>> types = c.typeList().stream().map(TypeLink::reflection).toList();
+                        if (parameters == null || types.size() != parameters.length) {
+                            return false;
+                        }
+                        for (int i = 0; i < types.size(); i++) {
+                            if (parameters[i] == null || !types.get(i).isAssignableFrom(parameters[i])) {
+                                return false;
+                            }
+                        }
+                        return true;
+                    }
+                )
+            );
+            return link;
+        }
+        return null;
     }
 
     public WithModifiers assertDefined(Class<?> calledClass, Class<?>... parameters) {
@@ -166,9 +197,10 @@ public class MethodReference {
                 context,
                 r -> String.format("%s does not have the right parameters", name)
             );
+            methodLink = actual;
             return actual;
         }
-        if (clazz == null || !clazz.isDefined()) {
+        if (!clazz.isDefined()) {
             fail(
                 context,
                 r -> String.format(
@@ -222,6 +254,8 @@ public class MethodReference {
         WithModifiers link = assertDefined(clazz.getLink().reflection(), parameters);
         String name =
             link.kind() == Link.Kind.METHOD ? ((MethodLink) link).reflection().getName() : Link.Kind.CONSTRUCTOR.name();
+        Modifier[] actualModifiers =
+            Arrays.stream(Modifier.values()).filter(m -> m.is(link.modifiers())).toArray(Modifier[]::new);
         Context context = contextBuilder()
             .add("expected class", clazz.getLink().name())
             .add("expected kind", kind)
@@ -233,7 +267,7 @@ public class MethodReference {
             .add("class", ((Executable) link.reflection()).getDeclaringClass().getName())
             .add("kind", link.kind())
             .add("name", name)
-            .add("modifier", Arrays.stream(expectedModifiers).map(Modifier::keyword).collect(Collectors.joining(", ")))
+            .add("modifier", Arrays.stream(actualModifiers).map(Modifier::keyword).collect(Collectors.joining(", ")))
             .build();
 
         assertNotNull(link, context, r -> "Could not find method %s.".formatted(name));
@@ -244,7 +278,6 @@ public class MethodReference {
             r -> "Declaring Class does not match expected Class."
         );
         assertEquals(link.kind(), link.kind(), context, r -> "Kind does not match expected kind.");
-        assertEquals(this.name, name, context, r -> "The name of the Method does not match the expected name.");
 
         assertTrue(
             Set.of(actualModifiers).containsAll(Set.of(expectedModifiers)),
@@ -254,9 +287,11 @@ public class MethodReference {
     }
 
     public void assertNamedCorrectly() {
-        assertDefined(clazz.getLink().reflection(), parameters);
+        WithModifiers link = getLink(clazz.getLink().reflection(), parameters);
+        if (link == null) {
+            return;
+        }
 
-        WithModifiers link = assertDefined(clazz.getLink().reflection(), parameters);
         String name =
             link.kind() == Link.Kind.METHOD ? ((MethodLink) link).reflection().getName() : Link.Kind.CONSTRUCTOR.name();
         Context context = contextBuilder()
@@ -264,12 +299,11 @@ public class MethodReference {
             .add("name", name)
             .build();
 
-        assertNotNull(link, context, r -> "Could not find method %s.".formatted(name));
-        assertEquals(this.name, name, emptyContext(), r -> "The name of the Method does not match the expected name.");
+        assertEquals(this.name, name, context, r -> "The name of the Method does not match the expected name.");
     }
 
     public <T> T invoke(Class<?> calledClass, Object instance, Object... parameter) throws Throwable {
-        Link link = assertDefined(calledClass, Arrays.stream(parameter).map(o -> o == null ? null : o.getClass()).toArray(Class[]::new));
+        Link link = assertDefined(calledClass, Arrays.stream(parameter).map(o -> o != null ? o.getClass() : null).toArray(Class[]::new));
         if (link instanceof MethodLink l) {
             return l.invoke(instance, parameter);
         } else if (link instanceof ConstructorLink l) {

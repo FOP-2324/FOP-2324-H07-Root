@@ -52,88 +52,6 @@ public class PowerPlantTest {
         }
     }
 
-    @CartesianTest
-    public void testCheck_SingleReactor(
-        @CartesianTest.Values(booleans = {true, false}) boolean overpowered,
-        @CartesianTest.Values(booleans = {true, false}) boolean needsMaintenance
-    ) {
-
-        List<Pair<Integer, String>> loggedMessages = new ArrayList<>();
-
-        double reactorPower = overpowered ? 1 : 0;
-
-        Reactor reactor = generateReactor(1, needsMaintenance, reactorPower);
-        PowerPlant plant = generatePowerPlant(
-            createLogger(loggedMessages),
-            List.of(
-                reactor
-            )
-        );
-
-        plant.check(0);
-
-        int expectedLines = 1 + (overpowered ? 1 : 0) + (needsMaintenance ? 1 : 0);
-
-        Context context = contextBuilder()
-            .add("power", reactorPower)
-            .add("needs maintenence", needsMaintenance)
-            .build();
-
-        assertEquals(
-            expectedLines,
-            loggedMessages.size(),
-            context,
-            r -> "The number of logged messages does not match the expected number."
-        );
-
-        int currentLogIndex = 0;
-
-        int finalCurrentLogIndex = currentLogIndex;
-        assertEquals(
-            reactor + ": Power = " + reactorPower,
-            loggedMessages.get(currentLogIndex).getRight(),
-            context,
-            r -> "The logged message at Position %d does not match the expected.".formatted(finalCurrentLogIndex)
-        );
-        assertEquals(
-            0,
-            loggedMessages.get(currentLogIndex++).getLeft(),
-            context,
-            r -> "The logged message at Position %d does have the expected level.".formatted(finalCurrentLogIndex)
-        );
-
-        if (overpowered) {
-            int finalCurrentLogIndex1 = currentLogIndex;
-            assertEquals(
-                reactor + ": Overpowerd!",
-                loggedMessages.get(currentLogIndex).getRight(),
-                context,
-                r -> "The logged message at Position %d does not match the expected.".formatted(finalCurrentLogIndex1)
-            );
-            assertEquals(
-                6,
-                loggedMessages.get(currentLogIndex++).getLeft(),
-                context,
-                r -> "The logged message at Position %d does have the expected level.".formatted(finalCurrentLogIndex1)
-            );
-        }
-        if (needsMaintenance) {
-            int finalCurrentLogIndex2 = currentLogIndex;
-            assertEquals(
-                reactor + ": Needs maintenance!",
-                loggedMessages.get(currentLogIndex).getRight(),
-                context,
-                r -> "The logged message at Position %d does not match the expected.".formatted(finalCurrentLogIndex2)
-            );
-            assertEquals(
-                3,
-                loggedMessages.get(currentLogIndex).getLeft(),
-                context,
-                r -> "The logged message at Position %d does have the expected level.".formatted(finalCurrentLogIndex2)
-            );
-        }
-    }
-
     @ParameterizedTest
     @IntRangeSource(from = 0, to = 6)
     public void testCheck_power(int reactorCount) {
@@ -148,6 +66,7 @@ public class PowerPlantTest {
 
         Context context = contextBuilder()
             .add("number of reactors", reactorCount)
+            .add("logged Messages", loggedMessages)
             .build();
 
         plant.check(0);
@@ -190,13 +109,14 @@ public class PowerPlantTest {
         Context context = contextBuilder()
             .add("number of reactors", reactorCount)
             .add("power", "id % 2")
+            .add("logged Messages", loggedMessages)
             .build();
 
         plant.check(0);
 
         assertEquals(
             (long) reactorCount / 2,
-            loggedMessages.stream().filter(message -> message.getRight().contains("Overpowerd")).count(),
+            loggedMessages.stream().filter(message -> message.getRight().contains("Overpowerd") || message.getRight().contains("Overpowered")).count(),
             context,
             r -> "An incorrect number of overpower logs is created."
         );
@@ -206,13 +126,14 @@ public class PowerPlantTest {
             long loggedCorrectMessage = loggedMessages.stream().filter(
                 logged ->
                     logged.getLeft() == 6
-                        && logged.getRight().equals("Reactor_" + finalI + ": Overpowerd!")
+                        && (logged.getRight().equals("Reactor_" + finalI + ": Overpowerd!")
+                            || logged.getRight().equals("Reactor_" + finalI + ": Overpowered!"))
             ).count();
             assertEquals(
                 (long) i % 2,
                 loggedCorrectMessage,
                 context,
-                r -> "Reactor %s did not create a correct number of Overpowerd logs.".formatted(finalI)
+                r -> "Reactor %s did not create a correct number of Overpowered logs.".formatted(finalI)
             );
         }
     }
@@ -232,6 +153,7 @@ public class PowerPlantTest {
         Context context = contextBuilder()
             .add("number of reactors", reactorCount)
             .add("maintenance", "id % 2 == 0")
+            .add("logged Messages", loggedMessages)
             .build();
 
         plant.check(0);

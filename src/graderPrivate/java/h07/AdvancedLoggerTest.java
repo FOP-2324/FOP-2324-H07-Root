@@ -3,33 +3,44 @@ package h07;
 import h07.tree.Node;
 import org.mockito.MockedConstruction;
 import org.mockito.MockedStatic;
+import org.tudalgo.algoutils.tutor.general.reflections.BasicTypeLink;
+import org.tudalgo.algoutils.tutor.general.reflections.MethodLink;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static h07.ClassReference.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
+import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.assertNotNull;
+import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.emptyContext;
+import static org.tudalgo.algoutils.tutor.general.match.BasicStringMatchers.identical;
 
 public class AdvancedLoggerTest {
 
     protected void withMocks(Runnable codeToRun) {
         try (MockedStatic<Log> logMock = mockStatic(Log.class)) {
-            logMock.when(() -> Log.createColorExpression(anyString())).thenAnswer(invocation -> {
-                    Object expression = mock(ClassReference.MAP_EXPRESSION.getLink().reflection());
-                    when(
-                        MethodReference.MAP_EXPRESSION_MAP.invoke(
-                            ClassReference.MAP_EXPRESSION.getLink().reflection(),
-                            expression, anyString()
-                        )
-                    ).thenAnswer(mapInvocation ->
-                        Log.ANSI_ESCAPE + invocation.getArgument(0)
-                            .toString() + mapInvocation.getArgument(0) + Log.ANSI_ESCAPE + Log.ANSI_RESET
-                    );
-                    return expression;
-                }
-            );
+
+            MethodLink link = BasicTypeLink.of(Log.class).getMethod(identical("createColorExpression"));
+
+            if (link != null) {
+                logMock.when(() -> link.invokeStatic(anyString())).thenAnswer(invocation -> {
+                        Object expression = mock(ClassReference.MAP_EXPRESSION.getLink().reflection());
+                        when(
+                            MethodReference.MAP_EXPRESSION_MAP.invoke(
+                                ClassReference.MAP_EXPRESSION.getLink().reflection(),
+                                expression, anyString()
+                            )
+                        ).thenAnswer(mapInvocation ->
+                            Log.ANSI_ESCAPE + invocation.getArgument(0)
+                                .toString() + mapInvocation.getArgument(0) + Log.ANSI_ESCAPE + Log.ANSI_RESET
+                        );
+                        return expression;
+                    }
+                );
+            }
 
             try (
                 MockedConstruction<?> condition = mockConditionNode();
@@ -43,7 +54,11 @@ public class AdvancedLoggerTest {
     }
 
     protected MockedConstruction<?> mockConditionNode() {
-        Class<?> conditionNodeClass = ClassReference.CONDITION_NODE.getLink().reflection();
+        if (!CONDITION_NODE.isDefined()) {
+            return null;
+        }
+
+        Class<?> conditionNodeClass = CONDITION_NODE.getLink().reflection();
         return mockConstruction(
             conditionNodeClass,
             (mock, context) -> {
@@ -84,7 +99,11 @@ public class AdvancedLoggerTest {
     }
 
     protected MockedConstruction<?> mockConcatenationNode() {
-        Class<?> concatenationNodeClass = ClassReference.CONCATENATION_NODE.getLink().reflection();
+        if (!CONCATENATION_NODE.isDefined()) {
+            return null;
+        }
+
+        Class<?> concatenationNodeClass = CONCATENATION_NODE.getLink().reflection();
         return mockConstruction(
             concatenationNodeClass,
             (mock, context) -> {
@@ -104,7 +123,11 @@ public class AdvancedLoggerTest {
     }
 
     protected MockedConstruction<?> mockMapNode() {
-        Class<?> mapNodeClass = ClassReference.MAP_NODE.getLink().reflection();
+        if (!MAP_NODE.isDefined()) {
+            return null;
+        }
+
+        Class<?> mapNodeClass = MAP_NODE.getLink().reflection();
         return mockConstruction(
             mapNodeClass,
             (mock, context) -> {
@@ -140,6 +163,10 @@ public class AdvancedLoggerTest {
     }
 
     protected MockedConstruction<?> mockValueNode() {
+        if (!VALUE_NODE.isDefined()) {
+            return null;
+        }
+
         Class<?> valueNodeClass = ClassReference.VALUE_NODE.getLink().reflection();
         return mockConstruction(
             valueNodeClass,

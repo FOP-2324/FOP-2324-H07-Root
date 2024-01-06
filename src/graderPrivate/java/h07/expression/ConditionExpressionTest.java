@@ -13,4 +13,10 @@ public class ConditionExpressionTest {
         ClassReference.CONDITION_EXPRESSION.assertCorrectlyDefined();
         MethodReference.CONDITION_EXPRESSION_CHECK.assertCorrectlyDefined();
     }
+
+    @Test
+    public void testNaming() {
+        ClassReference.CONDITION_EXPRESSION.assertNamedCorrectly();
+        MethodReference.CONDITION_EXPRESSION_CHECK.assertNamedCorrectly();
+    }
 }

@@ -23,14 +23,20 @@ public class MaintenanceLogTest extends AdvancedLoggerTest {
         withMocks(() -> {
             Node generated = logger.generateTree();
 
-            String actual = generated.evaluate();
+            String actual = null;
+            try {
+                actual = MethodReference.NODE_EVALUATE.invoke(generated.getClass(), generated);
+            } catch (Throwable e) {
+                throw new RuntimeException(e);
+            }
 
+            String finalActual = actual;
             assertEquals(
                 "",
                 actual,
                 emptyContext(),
                 r -> "The returned string does not have a correct formatting. The returned string was "
-                    + actual
+                    + finalActual
             );
         });
     }
@@ -44,14 +50,20 @@ public class MaintenanceLogTest extends AdvancedLoggerTest {
         withMocks(() -> {
             Node generated = logger.generateTree();
 
-            String actual = generated.evaluate();
+            String actual = null;
+            try {
+                actual = MethodReference.NODE_EVALUATE.invoke(generated.getClass(), generated);
+            } catch (Throwable e) {
+                throw new RuntimeException(e);
+            }
 
+            String finalActual = actual;
             assertNotEquals(
                 "",
                 actual,
                 emptyContext(),
                 r -> "The returned string does not have a correct formatting. The returned string was "
-                    + actual
+                    + finalActual
             );
         });
     }
@@ -65,15 +77,19 @@ public class MaintenanceLogTest extends AdvancedLoggerTest {
         withMocks(() -> {
             Node generated = logger.generateTree();
 
-            String actual = generated.evaluate();
+            String actual = null;
+            try {
+                actual = MethodReference.NODE_EVALUATE.invoke(generated.getClass(), generated);
+            } catch (Throwable e) {
+                throw new RuntimeException(e);
+            }
             String expected = logger.message + "\n";
 
             assertEquals(
                 expected,
                 actual,
                 emptyContext(),
-                r -> "The returned string does not have a correct formatting. The returned string was "
-                    + actual
+                r -> "The returned string does not have a correct formatting."
             );
         });
     }

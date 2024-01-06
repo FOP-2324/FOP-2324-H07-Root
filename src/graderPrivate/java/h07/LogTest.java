@@ -11,6 +11,7 @@ import org.tudalgo.algoutils.tutor.general.assertions.Assertions4;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 import org.tudalgo.algoutils.tutor.general.reflections.BasicMethodLink;
 import org.tudalgo.algoutils.tutor.general.reflections.BasicTypeLink;
+import org.tudalgo.algoutils.tutor.general.reflections.MethodLink;
 import spoon.reflect.declaration.CtMethod;
 
 import static h07.Log.*;
@@ -49,8 +50,11 @@ public class LogTest extends H07Test {
             .add("input", input)
             .build();
 
-        Object expression =
-            BasicTypeLink.of(Log.class).getMethod(Tests.stringMatcher("createColorExpression")).invokeStatic(ansiColor);
+        MethodLink link = BasicTypeLink.of(Log.class).getMethod(Tests.stringMatcher("createColorExpression"));
+
+        assertNotNull(link, emptyContext(), r -> "Could not find method Body of createColorExpression(). Method is probably unimplemented");
+
+        Object expression = link.invokeStatic(ansiColor);
         String actual = MethodReference.MAP_EXPRESSION_MAP.invoke(ClassReference.MAP_EXPRESSION.getLink().reflection(),
             expression,
             input
@@ -68,8 +72,12 @@ public class LogTest extends H07Test {
     @Test
     public void testCreateColorExpressionRequirements() {
 
-        CtMethod method = ((BasicMethodLink) BasicTypeLink.of(Log.class)
-            .getMethod(Tests.stringMatcher("createColorExpression"))).getCtElement();
+        BasicMethodLink link = ((BasicMethodLink) BasicTypeLink.of(Log.class)
+            .getMethod(Tests.stringMatcher("createColorExpression")));
+
+        assertNotNull(link, emptyContext(), r -> "Could not find method Body of createColorExpression(). Method is probably unimplemented");
+
+        CtMethod method = link.getCtElement();
 
         Assertions4.assertIsOneStatement(method.getBody(), emptyContext(), r -> "");
     }
@@ -97,8 +105,11 @@ public class LogTest extends H07Test {
         Log logger = mock(Log.class, CALLS_REAL_METHODS);
         BasicTypeLink.of(Log.class).getField(Tests.stringMatcher("rootNode")).set(logger, rootNode);
 
-        String actual =
-            BasicTypeLink.of(Log.class).getMethod(Tests.stringMatcher("format")).invoke(logger, level, message);
+        MethodLink link = BasicTypeLink.of(Log.class).getMethod(Tests.stringMatcher("format"));
+
+        assertNotNull(link, emptyContext(), r -> "Could not find method Body of format(). Method is probably unimplemented");
+
+        String actual = link.invoke(logger, level, message);
 
         assertEquals(
             expectedString,

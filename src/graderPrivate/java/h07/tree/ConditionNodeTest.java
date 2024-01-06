@@ -11,8 +11,8 @@ import org.tudalgo.algoutils.tutor.general.assertions.Context;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSet;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSetTest;
 
-import static h07.ClassReference.CONDITION_EXPRESSION;
-import static h07.ClassReference.CONDITION_NODE;
+import static h07.ClassReference.*;
+import static h07.FieldReference.CONDITION_NODE_CONDITION_EXPRESSION;
 import static h07.MethodReference.*;
 import static org.mockito.Mockito.*;
 import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.*;
@@ -27,16 +27,25 @@ public class ConditionNodeTest extends H07Test {
         CONDITION_NODE_SET_CONDITION_EXPRESSION.assertCorrectlyDefined();
     }
 
+    @Test
+    public void testNaming() {
+        CONDITION_NODE.assertNamedCorrectly();
+        CONDITION_NODE_CONSTRUCTOR.assertNamedCorrectly();
+        CONDITION_NODE_SET_CONDITION_EXPRESSION.assertNamedCorrectly();
+        CONDITION_NODE_CONDITION_EXPRESSION.assertNamedCorrectly();
+    }
+
     @ParameterizedTest
     @ValueSource(strings = {"expected", "false", "value", "stringy"})
     public void testConstructor(String input) throws Throwable {
+        CONDITION_NODE.assertDefined();
 
         //Node
-        Object objectiveNode = mock(CONDITION_NODE.getLink().reflection());
+        Object objectiveNode = mock(NODE.getLink().reflection());
         //Node
-        Object trueNode = mock(CONDITION_NODE.getLink().reflection());
+        Object trueNode = mock(NODE.getLink().reflection());
         //Node
-        Object falseNode = mock(CONDITION_NODE.getLink().reflection());
+        Object falseNode = mock(NODE.getLink().reflection());
         //Node
         Object toTest = CONDITION_NODE_CONSTRUCTOR.invoke(CONDITION_NODE.getLink().reflection(),
             null,
@@ -50,7 +59,7 @@ public class ConditionNodeTest extends H07Test {
         FieldReference.CONDITION_NODE_FALSE_NODE.assertStoredValue(toTest, falseNode, emptyContext());
 
         boolean actual = CONDITION_EXPRESSION_CHECK.invoke(CONDITION_EXPRESSION.getLink().reflection(),
-            FieldReference.CONDITION_NODE_CONDITION_EXPRESSION.getLink().get(toTest),
+            CONDITION_NODE_CONDITION_EXPRESSION.getLink().get(toTest),
             input
         );
 
@@ -63,6 +72,7 @@ public class ConditionNodeTest extends H07Test {
 
     @Test
     public void testSetConditionExpression() throws Throwable {
+        CONDITION_NODE.assertDefined();
         MockSettings settings = getSettings();
         //ConditionExpression
         Object conditionExpression = mock(CONDITION_EXPRESSION.getLink().reflection(), settings);
@@ -75,7 +85,7 @@ public class ConditionNodeTest extends H07Test {
             conditionExpression
         );
 
-        FieldReference.CONDITION_NODE_CONDITION_EXPRESSION.assertStoredValue(
+        CONDITION_NODE_CONDITION_EXPRESSION.assertStoredValue(
             toTest,
             conditionExpression,
             emptyContext()
@@ -96,13 +106,13 @@ public class ConditionNodeTest extends H07Test {
             .build();
 
         //Node
-        Object objectiveNode = mock(CONDITION_NODE.getLink().reflection());
+        Object objectiveNode = mock(NODE.getLink().reflection());
         when(NODE_EVALUATE.invoke(CONDITION_NODE.getLink().reflection(), objectiveNode)).thenReturn("nullnull");
         //Node
-        Object trueNode = mock(CONDITION_NODE.getLink().reflection());
+        Object trueNode = mock(NODE.getLink().reflection());
         when(NODE_EVALUATE.invoke(CONDITION_NODE.getLink().reflection(), trueNode)).thenReturn(positiveString);
         //Node
-        Object falseNode = mock(CONDITION_NODE.getLink().reflection());
+        Object falseNode = mock(NODE.getLink().reflection());
         when(NODE_EVALUATE.invoke(CONDITION_NODE.getLink().reflection(), falseNode)).thenReturn(negativeString);
         //ConditionExpression
         Object conditionExpression = mock(CONDITION_EXPRESSION.getLink().reflection());
@@ -118,7 +128,7 @@ public class ConditionNodeTest extends H07Test {
         FieldReference.CONDITION_NODE_FALSE_NODE.getLink().set(toTest, falseNode);
         FieldReference.CONDITION_NODE_TRUE_NODE.getLink().set(toTest, trueNode);
         FieldReference.CONDITION_NODE_OBJECTIVE_NODE.getLink().set(toTest, objectiveNode);
-        FieldReference.CONDITION_NODE_CONDITION_EXPRESSION.getLink().set(toTest, conditionExpression);
+        CONDITION_NODE_CONDITION_EXPRESSION.getLink().set(toTest, conditionExpression);
 
         String actual = NODE_EVALUATE.invoke(CONDITION_NODE.getLink().reflection(), toTest);
 

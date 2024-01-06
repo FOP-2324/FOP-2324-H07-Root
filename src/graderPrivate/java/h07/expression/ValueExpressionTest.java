@@ -13,4 +13,10 @@ public class ValueExpressionTest {
         ClassReference.VALUE_EXPRESSION.assertCorrectlyDefined();
         MethodReference.VALUE_EXPRESSION_GET.assertCorrectlyDefined();
     }
+
+    @Test
+    public void testNaming() {
+        ClassReference.VALUE_EXPRESSION.assertNamedCorrectly();
+        MethodReference.VALUE_EXPRESSION_GET.assertNamedCorrectly();
+    }
 }

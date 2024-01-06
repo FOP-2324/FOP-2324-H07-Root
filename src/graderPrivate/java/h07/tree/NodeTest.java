@@ -13,4 +13,10 @@ public class NodeTest {
         ClassReference.NODE.assertCorrectlyDefined();
         MethodReference.NODE_EVALUATE.assertCorrectlyDefined();
     }
+
+    @Test
+    public void testNaming() {
+        ClassReference.NODE.assertNamedCorrectly();
+        MethodReference.NODE_EVALUATE.assertNamedCorrectly();
+    }
 }

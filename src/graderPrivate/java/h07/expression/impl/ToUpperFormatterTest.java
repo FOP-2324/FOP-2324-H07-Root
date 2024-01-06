@@ -41,7 +41,14 @@ public class ToUpperFormatterTest {
     }
 
     @Test
+    public void testNaming() {
+        ClassReference.TO_UPPER_FORMATTER.assertNamedCorrectly();
+    }
+
+    @Test
     public void testMap() {
+
+        assertNotNull(EXERCISE_METHOD, emptyContext(), r -> "Could not find method map().");
 
         String source = EXERCISE_METHOD.getOriginalSourceFragment().toString();
 
@@ -59,7 +66,8 @@ public class ToUpperFormatterTest {
 
         String actual;
         try {
-            actual = MethodReference.MAP_EXPRESSION_MAP.invoke(ToUpperFormatter.class, formatterInstance, lowercase);
+            assertNotNull(EXERCISE_METHOD, emptyContext(), r -> "Could not find method map().");
+            actual = MethodReference.MAP_EXPRESSION_MAP.invoke(ClassReference.TO_UPPER_FORMATTER.getLink().reflection(), formatterInstance, lowercase);
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }

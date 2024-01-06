@@ -22,18 +22,27 @@ public class H07_RubricProvider implements RubricProvider {
                 .shortDescription("H1: Interfaces definieren")
                 .addChildCriteria(
                     criterion(
-                        "H1.1: ValueExpression ist vollständig korrekt definiert",
+                        "H1.1: ValueExpression ist vollständig korrekt definiert.",
                         JUnitTestRef.ofMethod(() -> ValueExpressionTest.class.getDeclaredMethod("testDefinition"))
                     ),
                     criterion(
-                        "H1.2: MapExpression ist vollständig korrekt definiert",
+                        "H1.2: MapExpression ist vollständig korrekt definiert.",
                         JUnitTestRef.ofMethod(() -> MapExpressionTest.class.getDeclaredMethod("testDefinition"))
                     ),
                     criterion(
-                        "H1.3: ConditionExpression ist vollständig korrekt definiert",
+                        "H1.3: ConditionExpression ist vollständig korrekt definiert.",
                         JUnitTestRef.ofMethod(() -> ConditionExpressionTest.class.getDeclaredMethod("testDefinition"))
-                    )
+                    ),
+                    criterion("H1: Alle Typen und Methoden wurden korrekt benannt.",
+                            JUnitTestRef.and(
+                                JUnitTestRef.ofMethod(() -> ConditionExpressionTest.class.getDeclaredMethod("testNaming")),
+                                JUnitTestRef.ofMethod(() -> MapExpressionTest.class.getDeclaredMethod("testNaming")),
+                                JUnitTestRef.ofMethod(() -> ValueExpressionTest.class.getDeclaredMethod("testNaming"))
+                            ),
+                        -1
+                        )
                 )
+                .minPoints(0)
                 .build(),
             Criterion.builder()
                 .shortDescription("H2: Interface implementieren")
@@ -54,8 +63,12 @@ public class H07_RubricProvider implements RubricProvider {
                             ),
                             criterion(
                                 "H2.1: ToUpperFormatter ist vollständig korrekt definiert",
-                                JUnitTestRef.ofMethod(() -> ToUpperFormatterTest.class.getDeclaredMethod(
-                                    "testDefinition")),
+                                JUnitTestRef.and(
+                                    JUnitTestRef.ofMethod(() -> ToUpperFormatterTest.class.getDeclaredMethod(
+                                        "testDefinition")),
+                                    JUnitTestRef.ofMethod(() -> ToUpperFormatterTest.class.getDeclaredMethod(
+                                        "testNaming"))
+                                    ),
                                 -1
                             )
                         )
@@ -68,9 +81,12 @@ public class H07_RubricProvider implements RubricProvider {
                                 "H2.2: testNormal() ist korrekt implementiert",
                                 JUnitTestRef.ofMethod(() -> MainTest.class.getDeclaredMethod("testTestNormal"))
                             ),
-                            //TODO
                             criterion(
-                                "H2.2: Anonyme Klasse wird korrekt getestet"
+                                "H2.2: Anonyme Klasse wird korrekt getestet",
+                                JUnitTestRef.and(
+                                    JUnitTestRef.ofMethod(() -> MainTest.class.getDeclaredMethod("testTestAnonymous")),
+                                    JUnitTestRef.ofMethod(() -> MainTest.class.getDeclaredMethod("testTestAnonymous", JsonParameterSet.class))
+                                )
                             ),
                             criterion(
                                 "H2.2: testLambda() und testMethodReference() sind korrekt implementiert",
@@ -215,7 +231,17 @@ public class H07_RubricProvider implements RubricProvider {
                             )
                         )
                         .minPoints(0)
-                        .build()
+                        .build(),
+                    criterion("H3: Alle Typen und Methoden wurden korrekt benannt.",
+                        JUnitTestRef.and(
+                            JUnitTestRef.ofMethod(() -> NodeTest.class.getDeclaredMethod("testNaming")),
+                            JUnitTestRef.ofMethod(() -> ConcatenationNodeTest.class.getDeclaredMethod("testNaming")),
+                            JUnitTestRef.ofMethod(() -> ValueNodeTest.class.getDeclaredMethod("testNaming")),
+                            JUnitTestRef.ofMethod(() -> MapNodeTest.class.getDeclaredMethod("testNaming")),
+                            JUnitTestRef.ofMethod(() -> ConditionNodeTest.class.getDeclaredMethod("testNaming"))
+                        ),
+                        -1
+                    )
                 )
                 .build(),
             Criterion.builder()

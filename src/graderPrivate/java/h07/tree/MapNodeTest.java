@@ -18,8 +18,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import static h07.ClassReference.MAP_EXPRESSION;
-import static h07.ClassReference.MAP_NODE;
+import static h07.ClassReference.*;
 import static org.mockito.Mockito.*;
 import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.*;
 
@@ -82,12 +81,20 @@ public class MapNodeTest extends H07Test {
         FieldReference.MAP_NODE_NODE.assertCorrectlyDefined();
     }
 
+    @Test
+    public void testNaming() {
+        MAP_NODE.assertNamedCorrectly();
+        MethodReference.MAP_NODE_CONSTRUCTOR.assertNamedCorrectly();
+        MethodReference.MAP_NODE_SET_MAP_EXPRESSION.assertNamedCorrectly();
+        FieldReference.MAP_NODE_MAP_EXPRESSION.assertNamedCorrectly();
+    }
+
     @ParameterizedTest
     @ValueSource(strings = {"", "test", "Some String", "SomeStringInCamelCase"})
     public void testConstructor(String testString) throws Throwable {
 
         //Node
-        Object node = mock(MAP_NODE.getLink().reflection());
+        Object node = mock(NODE.getLink().reflection());
 
         //MapNode
         Object mapNode = MethodReference.MAP_NODE_CONSTRUCTOR.invoke(MAP_NODE.getLink().reflection(), null, node);
@@ -124,7 +131,7 @@ public class MapNodeTest extends H07Test {
     @MethodSource("provideEvaluate")
     public void testEvaluate(Object expression, String expressionDescription, String nodeEvaluate, String expected) throws Throwable {
         //Node
-        Object node = mock(MAP_NODE.getLink().reflection());
+        Object node = mock(NODE.getLink().reflection());
         when(MethodReference.NODE_EVALUATE.invoke(MAP_NODE.getLink().reflection(), node)).thenReturn(nodeEvaluate);
         //MapNode
         Object mapNode = mock(MAP_NODE.getLink().reflection(), CALLS_REAL_METHODS);

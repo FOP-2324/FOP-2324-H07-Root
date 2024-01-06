@@ -4,13 +4,11 @@ import h07.tree.Node;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.MockedConstruction;
 import org.mockito.MockedStatic;
 import org.sourcegrade.jagr.api.rubric.TestForSubmission;
+import org.tudalgo.algoutils.tutor.general.assertions.Context;
 
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.mockito.Mockito.*;
 import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.*;
@@ -22,28 +20,36 @@ public class NormalLogTest extends AdvancedLoggerTest {
     @ValueSource(longs = {0, 1, 2, 3, 4})
     public void testGenerateTree_time(long hourOffset) {
 
-        LocalTime time = LocalTime.now();
-        time = time.minusHours(hourOffset);
+        NormalLog logger = mock(NormalLog.class, CALLS_REAL_METHODS);
+        logger.message = "Any kind of message";
 
-        try (MockedStatic<LocalTime> timeMock = mockStatic(LocalTime.class)) {
-            timeMock.when(LocalTime::now).thenReturn(time);
-
-            NormalLog logger = mock(NormalLog.class, CALLS_REAL_METHODS);
-            logger.message = "Any kind of message";
-
-            withMocks(() -> {
+        withMocks(() -> {
+            LocalTime time = LocalTime.now();
+            time = time.minusHours(hourOffset);
+            try (MockedStatic<LocalTime> timeMock = mockStatic(LocalTime.class)) {
+                timeMock.when(LocalTime::now).thenReturn(time);
                 Node generated = logger.generateTree();
 
-                String actual = generated.evaluate();
+                String actual = null;
+                try {
+                    actual = MethodReference.NODE_EVALUATE.invoke(generated.getClass(), generated);
+                } catch (Throwable e) {
+                    throw new RuntimeException(e);
+                }
                 String expected = LocalTime.now() + ": ";
+
+                Context context = contextBuilder()
+                    .add("expected beginning", expected)
+                    .add("actual", actual)
+                    .build();
 
                 assertTrue(
                     actual.startsWith(expected),
-                    emptyContext(),
-                    r -> "The returned string does not begin with the date. The returned string was " + actual
+                    context,
+                    r -> "The returned string does not begin with the date."
                 );
-            });
-        }
+            }
+        });
     }
 
     @ParameterizedTest
@@ -64,15 +70,21 @@ public class NormalLogTest extends AdvancedLoggerTest {
 
         withMocks(() -> {
             Node generated = logger.generateTree();
-            String actual = generated.evaluate().replaceAll("\n", "");
+            String actual = null;
+            try {
+                actual = MethodReference.NODE_EVALUATE.<String>invoke(generated.getClass(), generated).replaceAll("\n", "");;
+            } catch (Throwable e) {
+                throw new RuntimeException(e);
+            }
             String expected = Log.ANSI_ESCAPE + color + logger.message + Log.ANSI_ESCAPE + Log.ANSI_RESET;
 
+            String finalActual = actual;
             assertEquals(
                 expected,
                 actual.substring(actual.length() - expected.length()),
                 emptyContext(),
                 r -> "The returned string does not contain the correctly colored message. The returned string was "
-                    + actual
+                    + finalActual
             );
         });
     }
@@ -86,14 +98,20 @@ public class NormalLogTest extends AdvancedLoggerTest {
         withMocks(() -> {
             Node generated = logger.generateTree();
 
-            String actual = generated.evaluate();
+            String actual = null;
+            try {
+                actual = MethodReference.NODE_EVALUATE.invoke(generated.getClass(), generated);
+            } catch (Throwable e) {
+                throw new RuntimeException(e);
+            }
             String expected = logger.message.replace("\n", ";");
 
+            String finalActual = actual;
             assertTrue(
                 actual.contains(expected),
                 emptyContext(),
                 r -> "The returned string does not have all new lines correctly replaced. The returned string was "
-                    + actual
+                    + finalActual
             );
         });
     }

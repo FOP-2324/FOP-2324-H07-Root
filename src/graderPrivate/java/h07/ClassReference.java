@@ -77,6 +77,10 @@ public class ClassReference {
 
         try {
             link = (BasicTypeLink) BasicPackageLink.of(pack).getType(Tests.stringMatcher(name));
+
+            if (link != null && link.reflection().getName().endsWith("Test")) {
+                link = null;
+            }
         } catch (Exception ignored) {
         }
     }
@@ -117,7 +121,6 @@ public class ClassReference {
             r -> "Package name does not match expected package name."
         );
         assertEquals(kind, link.kind(), context, r -> "Kind does not match expected kind.");
-        assertEquals(name, link.name(), context, r -> "The name of the Type does not match the expected name.");
         assertTrue(
             Arrays.stream(modifiers).allMatch(m -> m.is(link.modifiers())),
             context,
@@ -126,7 +129,9 @@ public class ClassReference {
     }
 
     public void assertNamedCorrectly() {
-        assertDefined();
+        if (!isDefined()) {
+            return;
+        }
         Context context = contextBuilder()
             .add("expected name", name)
             .add("name", link.name())
@@ -137,6 +142,7 @@ public class ClassReference {
     }
 
     public BasicTypeLink getLink() {
+        assertDefined();
         return link;
     }
 }

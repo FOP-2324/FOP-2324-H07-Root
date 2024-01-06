@@ -13,4 +13,10 @@ public class MapExpressionTest {
         ClassReference.MAP_EXPRESSION.assertCorrectlyDefined();
         MethodReference.MAP_EXPRESSION_MAP.assertCorrectlyDefined();
     }
+
+    @Test
+    public void testNaming() {
+        ClassReference.MAP_EXPRESSION.assertNamedCorrectly();
+        MethodReference.MAP_EXPRESSION_MAP.assertNamedCorrectly();
+    }
 }

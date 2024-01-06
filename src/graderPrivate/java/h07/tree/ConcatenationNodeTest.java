@@ -12,6 +12,7 @@ import org.tudalgo.algoutils.tutor.general.json.JsonParameterSet;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSetTest;
 
 import static h07.ClassReference.CONCATENATION_NODE;
+import static h07.ClassReference.NODE;
 import static org.mockito.Mockito.*;
 import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.*;
 
@@ -32,13 +33,19 @@ public class ConcatenationNodeTest extends H07Test {
     }
 
     @Test
+    public void testNaming() {
+        CONCATENATION_NODE.assertNamedCorrectly();
+        MethodReference.CONCATENATION_NODE_CONSTRUCTOR.assertNamedCorrectly();
+    }
+
+    @Test
     public void testConstructor() throws Throwable {
 
         //Node
-        Object left = mock(CONCATENATION_NODE.getLink().reflection());
+        Object left = mock(NODE.getLink().reflection());
 
         //Node
-        Object right = mock(CONCATENATION_NODE.getLink().reflection());
+        Object right = mock(NODE.getLink().reflection());
 
         //ConditionNode
         Object node = MethodReference.CONCATENATION_NODE_CONSTRUCTOR.invoke(CONCATENATION_NODE.getLink().reflection(),
@@ -65,12 +72,12 @@ public class ConcatenationNodeTest extends H07Test {
 
 
         //Node
-        Object left = mock(CONCATENATION_NODE.getLink().reflection());
+        Object left = mock(NODE.getLink().reflection());
         when(MethodReference.NODE_EVALUATE.invoke(CONCATENATION_NODE.getLink().reflection(), left)).thenReturn(
             leftNodeEvaluate);
 
         //Node
-        Object right = mock(CONCATENATION_NODE.getLink().reflection());
+        Object right = mock(NODE.getLink().reflection());
         when(MethodReference.NODE_EVALUATE.invoke(CONCATENATION_NODE.getLink().reflection(), right)).thenReturn(
             rightNodeEvaluate);
 
