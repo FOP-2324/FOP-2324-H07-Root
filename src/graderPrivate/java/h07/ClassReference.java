@@ -1,5 +1,10 @@
 package h07;
 
+import org.junit.jupiter.engine.descriptor.ClassTestDescriptor;
+import org.junit.jupiter.engine.descriptor.TestInstanceLifecycleUtils;
+import org.junit.platform.commons.util.ReflectionUtils;
+import org.tudalgo.algoutils.reflect.ClassTester;
+import org.tudalgo.algoutils.reflect.TestUtils;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 import org.tudalgo.algoutils.tutor.general.reflections.BasicPackageLink;
 import org.tudalgo.algoutils.tutor.general.reflections.BasicTypeLink;
@@ -7,12 +12,15 @@ import org.tudalgo.algoutils.tutor.general.reflections.Link;
 import org.tudalgo.algoutils.tutor.general.reflections.Modifier;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.*;
 
 
 public class ClassReference {
+
+    public static final List<String> PREDEFINED_PACKAGES = List.of("h07", "h07.expression", "h07.expression.impl",  "h07.tree");
 
     public static final ClassReference VALUE_EXPRESSION =
         new ClassReference("h07.expression", "ValueExpression", Link.Kind.INTERFACE);
@@ -76,11 +84,19 @@ public class ClassReference {
         this.modifiers = modifiers;
 
         try {
-            link = (BasicTypeLink) BasicPackageLink.of(pack).getType(Tests.stringMatcher(name));
 
-            if (link != null && link.reflection().getName().endsWith("Test")) {
-                link = null;
+            for (String packageName : PREDEFINED_PACKAGES) {
+                link = (BasicTypeLink) BasicPackageLink.of(packageName).getType(Tests.stringMatcher(name));
+                if (link != null && !link.reflection().getName().endsWith("Test")) {
+                    return;
+                }
             }
+            link = null;
+
+//            link = (BasicTypeLink) BasicPackageLink.of(pack).getType(Tests.stringMatcher(name));
+//            if (link != null && link.reflection().getName().endsWith("Test")) {
+//                link = null;
+//            }
         } catch (Exception ignored) {
         }
     }

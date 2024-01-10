@@ -3,13 +3,17 @@ package h07;
 import h07.tree.Node;
 import org.mockito.MockedConstruction;
 import org.mockito.MockedStatic;
+import org.mockito.stubbing.Answer;
 import org.tudalgo.algoutils.tutor.general.reflections.BasicTypeLink;
 import org.tudalgo.algoutils.tutor.general.reflections.MethodLink;
+import org.tudalgo.algoutils.tutor.general.reflections.WithModifiers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static h07.ClassReference.*;
+import static h07.MethodReference.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -24,7 +28,10 @@ public class AdvancedLoggerTest {
 
             if (link != null) {
                 logMock.when(() -> link.invokeStatic(anyString())).thenAnswer(invocation -> {
-                        Object expression = mock(ClassReference.MAP_EXPRESSION.getLink().reflection());
+                        Object expression = mock(
+                            ClassReference.MAP_EXPRESSION.getLink().reflection(),
+                            CALLS_REAL_METHODS
+                        );
                         when(
                             MethodReference.MAP_EXPRESSION_MAP.invoke(
                                 ClassReference.MAP_EXPRESSION.getLink().reflection(),
@@ -60,27 +67,40 @@ public class AdvancedLoggerTest {
             conditionNodeClass,
             (mock, context) -> {
 
+                List<Object> expression = new ArrayList<>();
                 Object objective = context.arguments().get(0);
                 Object trueNode = context.arguments().get(1);
                 Object falseNode = context.arguments().get(2);
-                Object defaultExpression = mock(ClassReference.CONDITION_EXPRESSION.getLink().reflection());
-                when(MethodReference.CONDITION_EXPRESSION_CHECK.invoke(ClassReference.CONDITION_EXPRESSION.getLink()
-                    .reflection(), defaultExpression, anyString())).thenReturn(false);
-                List<Object> expression = new ArrayList<>();
+                Object defaultExpression = mock(CONDITION_EXPRESSION.getLink().reflection(), ignored -> false);
+                setIfDefined(FieldReference.CONDITION_NODE_CONDITION_EXPRESSION, mock, defaultExpression);
+                mockIfDefined(
+                    CONDITION_EXPRESSION_CHECK,
+                    CONDITION_EXPRESSION.getLink().reflection(),
+                    defaultExpression,
+                    ignored -> false,
+                    anyString()
+                );
                 expression.add(defaultExpression);
 
-                when(MethodReference.CONDITION_NODE_SET_CONDITION_EXPRESSION.invoke(
+                mockIfDefined(
+                    CONDITION_NODE_SET_CONDITION_EXPRESSION,
                     conditionNodeClass,
                     mock,
-                    any(ClassReference.CONDITION_EXPRESSION.getLink().reflection())
-                )).thenAnswer((invocation -> {
-                    expression.set(0, invocation.getArgument(0));
-                    return null;
-                }));
-                when(MethodReference.NODE_EVALUATE.invoke(conditionNodeClass, mock)).thenAnswer(invocation -> {
+                    invocation -> {
+                        expression.set(0, invocation.getArgument(0));
+                        return null;
+                    },
+                    any(CONDITION_EXPRESSION.getLink().reflection())
+                );
+
+                mockIfDefined(
+                    NODE_EVALUATE,
+                    conditionNodeClass,
+                    mock,
+                    invocation -> {
                         String objectiveEval = MethodReference.NODE_EVALUATE.invoke(objective.getClass(), objective);
                         boolean conditionEval =
-                            MethodReference.CONDITION_EXPRESSION_CHECK.invoke(
+                            MethodReference.CONDITION_EXPRESSION_CHECK.invokeBestEffort(
                                 expression.get(0).getClass(),
                                 expression.get(0),
                                 objectiveEval
@@ -108,19 +128,21 @@ public class AdvancedLoggerTest {
                 Object left = context.arguments().get(0);
                 Object right = context.arguments().get(1);
 
-                when(MethodReference.NODE_EVALUATE.invoke(
+                mockIfDefined(
+                    NODE_EVALUATE,
                     concatenationNodeClass,
-                    mock
-                )).thenAnswer(ignored -> "" + MethodReference.NODE_EVALUATE.invoke(
-                    left.getClass(),
-                    left
-                ) + MethodReference.NODE_EVALUATE.invoke(right.getClass(), right));
+                    mock,
+                    ignored -> "" + MethodReference.NODE_EVALUATE.invoke(
+                        left.getClass(),
+                        left
+                    ) + MethodReference.NODE_EVALUATE.invoke(right.getClass(), right)
+                );
             }
         );
     }
 
     protected MockedConstruction<?> mockMapNode() {
-        if (!MAP_NODE.isDefined()) {
+        if (!MAP_NODE.isDefined() || !MAP_EXPRESSION.isDefined()) {
             return null;
         }
 
@@ -128,33 +150,40 @@ public class AdvancedLoggerTest {
         return mockConstruction(
             mapNodeClass,
             (mock, context) -> {
-
-                Object node = context.arguments().get(0);
-                Object defaultExpression = mock(ClassReference.MAP_EXPRESSION.getLink().reflection());
-                when(MethodReference.MAP_EXPRESSION_MAP.invoke(
-                    ClassReference.MAP_EXPRESSION.getLink().reflection(),
-                    defaultExpression,
-                    anyString()
-                )).thenAnswer(invocation -> invocation.getArgument(0));
                 List<Object> expression = new ArrayList<>();
+                Object node = context.arguments().get(0);
+                Object defaultExpression = mock(MAP_EXPRESSION.getLink().reflection(), ignored -> "");
+                setIfDefined(FieldReference.MAP_NODE_MAP_EXPRESSION, mock, defaultExpression);
+                mockIfDefined(
+                    MAP_EXPRESSION_MAP,
+                    MAP_EXPRESSION.getLink().reflection(),
+                    defaultExpression,
+                    invocation -> invocation.getArgument(0),
+                    anyString()
+                );
 
                 expression.add(defaultExpression);
-                when(MethodReference.MAP_NODE_SET_MAP_EXPRESSION.invoke(
+                mockIfDefined(
+                    MAP_NODE_SET_MAP_EXPRESSION,
                     mapNodeClass,
                     mock,
-                    any(ClassReference.MAP_EXPRESSION.getLink().reflection())
-                )).thenAnswer((invocation -> {
-                    expression.set(0, invocation.getArgument(0));
-                    return null;
-                }));
-                when(MethodReference.NODE_EVALUATE.invoke(
+                    invocation -> {
+                        expression.set(0, invocation.getArgument(0));
+                        return null;
+                    },
+                    any(MAP_EXPRESSION.getLink().reflection())
+                );
+
+                mockIfDefined(
+                    NODE_EVALUATE,
                     mapNodeClass,
-                    mock
-                )).thenAnswer(ignored -> MethodReference.MAP_EXPRESSION_MAP.invoke(
-                    expression.get(0).getClass(),
-                    expression.get(0),
-                    (String) MethodReference.NODE_EVALUATE.invoke(Node.class, node)
-                ));
+                    mock,
+                    ignored -> MAP_EXPRESSION_MAP.invokeBestEffort(
+                        expression.get(0).getClass(),
+                        expression.get(0),
+                        (String) NODE_EVALUATE.invoke(Node.class, node)
+                    )
+                );
             }
         );
     }
@@ -164,33 +193,58 @@ public class AdvancedLoggerTest {
             return null;
         }
 
-        Class<?> valueNodeClass = ClassReference.VALUE_NODE.getLink().reflection();
+        Class<?> valueNodeClass = VALUE_NODE.getLink().reflection();
         return mockConstruction(
             valueNodeClass,
             (mock, context) -> {
-                Object defaultExpression = mock(ClassReference.VALUE_EXPRESSION.getLink().reflection());
-                when(MethodReference.VALUE_EXPRESSION_GET.invoke(
-                    ClassReference.VALUE_EXPRESSION.getLink().reflection(),
-                    defaultExpression
-                )).thenReturn("");
                 List<Object> expression = new ArrayList<>();
+                Object defaultExpression = mock(VALUE_EXPRESSION.getLink().reflection(), ignored -> "");
+                setIfDefined(FieldReference.VALUE_NODE_EXPRESSION, mock, defaultExpression);
+                mockIfDefined(
+                    VALUE_EXPRESSION_GET,
+                    VALUE_EXPRESSION.getLink().reflection(),
+                    defaultExpression,
+                    ignored -> ""
+                );
+
                 expression.add(defaultExpression);
-                when(MethodReference.VALUE_NODE_SET_VALUE_EXPRESSION.invoke(
+                mockIfDefined(
+                    VALUE_NODE_SET_VALUE_EXPRESSION,
                     valueNodeClass,
                     mock,
-                    any(ClassReference.VALUE_EXPRESSION.getLink().reflection())
-                )).thenAnswer((invocation -> {
-                    expression.set(0, invocation.getArgument(0));
-                    return null;
-                }));
-                when(MethodReference.NODE_EVALUATE.invoke(
+                    invocation -> {
+                        expression.set(0, invocation.getArgument(0));
+                        return null;
+                    },
+                    any(VALUE_EXPRESSION.getLink().reflection())
+                );
+                mockIfDefined(
+                    NODE_EVALUATE,
                     valueNodeClass,
-                    mock
-                )).thenAnswer(ignored -> MethodReference.VALUE_EXPRESSION_GET.invoke(
-                    expression.get(0).getClass(),
-                    expression.get(0)
-                ));
+                    mock,
+                    ignored -> VALUE_EXPRESSION_GET.invokeBestEffort(expression.get(0).getClass(), expression.get(0))
+                );
             }
         );
+    }
+
+    public void mockIfDefined(MethodReference method, Class<?> definingClass, Object mock, Answer<?> answer,
+                              Object... parameter) throws Throwable {
+        WithModifiers link = method.getLink(
+            definingClass,
+            Arrays.stream(parameter).map(o -> o == null ? null : o.getClass()).toArray(Class[]::new)
+        );
+        if (link == null) {
+            return;
+        }
+
+        when(method.invoke(definingClass, mock, parameter)).thenAnswer(answer);
+    }
+
+    public void setIfDefined(FieldReference field, Object object, Object value) {
+        if (!field.isDefined()) {
+            return;
+        }
+        field.getLink().set(object, value);
     }
 }

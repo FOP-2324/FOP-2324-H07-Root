@@ -75,8 +75,8 @@ public class ValueNodeTest extends H07Test {
         );
 
         //ValueExpression
-        Object expression = mock(ValueNodeTest.expression);
-        when(VALUE_EXPRESSION_GET.invoke(ValueNodeTest.expression, expression)).thenReturn(testString);
+        Object expression = mock(ValueNodeTest.expression, CALLS_REAL_METHODS);
+        when(VALUE_EXPRESSION_GET.invokeBestEffort(ValueNodeTest.expression, expression)).thenReturn(testString);
 
         VALUE_NODE_EXPRESSION.getLink().set(node, expression);
 
@@ -100,7 +100,7 @@ public class ValueNodeTest extends H07Test {
 
         //ValueExpression
         Object expression = mock(ValueNodeTest.expression, settings);
-        when(VALUE_EXPRESSION_GET.invoke(VALUE_NODE.getLink().reflection(), expression)).thenReturn(returnedValue);
+        when(VALUE_EXPRESSION_GET.invokeBestEffort(VALUE_EXPRESSION.getLink().reflection(), expression)).thenReturn(returnedValue);
 
         VALUE_NODE_SET_VALUE_EXPRESSION.invoke(VALUE_NODE.getLink().reflection(), node, expression);
 

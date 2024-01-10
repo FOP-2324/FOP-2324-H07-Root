@@ -21,7 +21,7 @@ public class MaintenanceLogTest extends AdvancedLoggerTest {
         logger.level = level;
 
         withMocks(() -> {
-            Node generated = logger.generateTree();
+            Object generated = logger.generateTree();
 
             String actual = null;
             try {
@@ -48,7 +48,7 @@ public class MaintenanceLogTest extends AdvancedLoggerTest {
         logger.level = 3;
 
         withMocks(() -> {
-            Node generated = logger.generateTree();
+            Object generated = logger.generateTree();
 
             String actual = null;
             try {
@@ -75,7 +75,7 @@ public class MaintenanceLogTest extends AdvancedLoggerTest {
         logger.level = 3;
 
         withMocks(() -> {
-            Node generated = logger.generateTree();
+            Object generated = logger.generateTree();
 
             String actual = null;
             try {

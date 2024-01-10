@@ -154,14 +154,12 @@ public class H07_RubricProvider implements RubricProvider {
                             criterion(
                                 "H3.3: setValueExpression() ist korrekt implementiert",
                                 JUnitTestRef.ofMethod(() -> ValueNodeTest.class.getDeclaredMethod(
-                                    "testEvaluate", String.class))
+                                    "testSetValueExpression", String.class))
                             ),
                             criterion(
                                 "H3.3 evaluate() ist korrekt implementiert",
                                 JUnitTestRef.ofMethod(() -> ValueNodeTest.class.getDeclaredMethod(
-                                    "testSetValueExpression",
-                                    String.class
-                                ))
+                                    "testEvaluate", String.class))
                             ),
                             criterion(
                                 "H3.3: ValueNode ist korrekt definiert",

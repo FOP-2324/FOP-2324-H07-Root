@@ -41,11 +41,11 @@ public class ConditionNodeTest extends H07Test {
         CONDITION_NODE.assertDefined();
 
         //Node
-        Object objectiveNode = mock(NODE.getLink().reflection());
+        Object objectiveNode = mock(NODE.getLink().reflection(), CALLS_REAL_METHODS);
         //Node
-        Object trueNode = mock(NODE.getLink().reflection());
+        Object trueNode = mock(NODE.getLink().reflection(), CALLS_REAL_METHODS);
         //Node
-        Object falseNode = mock(NODE.getLink().reflection());
+        Object falseNode = mock(NODE.getLink().reflection(), CALLS_REAL_METHODS);
         //Node
         Object toTest = CONDITION_NODE_CONSTRUCTOR.invoke(
             CONDITION_NODE.getLink().reflection(),
@@ -108,18 +108,18 @@ public class ConditionNodeTest extends H07Test {
             .build();
 
         //Node
-        Object objectiveNode = mock(NODE.getLink().reflection());
-        when(NODE_EVALUATE.invoke(CONDITION_NODE.getLink().reflection(), objectiveNode)).thenReturn("nullnull");
+        Object objectiveNode = mock(NODE.getLink().reflection(), CALLS_REAL_METHODS);
+        when(NODE_EVALUATE.invoke(NODE.getLink().reflection(), objectiveNode)).thenReturn("nullnull");
         //Node
-        Object trueNode = mock(NODE.getLink().reflection());
-        when(NODE_EVALUATE.invoke(CONDITION_NODE.getLink().reflection(), trueNode)).thenReturn(positiveString);
+        Object trueNode = mock(NODE.getLink().reflection(), CALLS_REAL_METHODS);
+        when(NODE_EVALUATE.invoke(NODE.getLink().reflection(), trueNode)).thenReturn(positiveString);
         //Node
-        Object falseNode = mock(NODE.getLink().reflection());
-        when(NODE_EVALUATE.invoke(CONDITION_NODE.getLink().reflection(), falseNode)).thenReturn(negativeString);
+        Object falseNode = mock(NODE.getLink().reflection(), CALLS_REAL_METHODS);
+        when(NODE_EVALUATE.invoke(NODE.getLink().reflection(), falseNode)).thenReturn(negativeString);
         //ConditionExpression
-        Object conditionExpression = mock(CONDITION_EXPRESSION.getLink().reflection());
-        when(CONDITION_EXPRESSION_CHECK.invoke(
-            CONDITION_NODE.getLink().reflection(),
+        Object conditionExpression = mock(CONDITION_EXPRESSION.getLink().reflection(), CALLS_REAL_METHODS);
+        when(CONDITION_EXPRESSION_CHECK.invokeBestEffort(
+            CONDITION_EXPRESSION.getLink().reflection(),
             conditionExpression,
             anyString()
         )).thenReturn(expected);

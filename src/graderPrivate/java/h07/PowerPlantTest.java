@@ -88,7 +88,7 @@ public class PowerPlantTest {
                 1L,
                 loggedCorrectMessage,
                 context,
-                r -> "Reactor %s did not create a correct number of Power logs.".formatted(finalI)
+                r -> "Reactor %s did not create a correct number of Power logs or logs are incorrectly formatted.".formatted(finalI)
             );
         }
     }
@@ -135,7 +135,7 @@ public class PowerPlantTest {
                 (long) i % 2,
                 loggedCorrectMessage,
                 context,
-                r -> "Reactor %s did not create a correct number of Overpowered logs.".formatted(finalI)
+                r -> "Reactor %s did not create a correct number of Overpowered logs or logs are incorrectly formatted.".formatted(finalI)
             );
         }
     }
@@ -178,7 +178,7 @@ public class PowerPlantTest {
                 (long) (i + 1) % 2,
                 loggedCorrectMessage,
                 context,
-                r -> "Reactor %s did not create a correct number of maintenance logs.".formatted(finalI)
+                r -> "Reactor %s did not create a correct number of maintenance logs or logs are incorrectly formatted.".formatted(finalI)
             );
         }
     }

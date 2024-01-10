@@ -28,12 +28,15 @@ public class NormalLogTest extends AdvancedLoggerTest {
             time = time.minusHours(hourOffset);
             try (MockedStatic<LocalTime> timeMock = mockStatic(LocalTime.class)) {
                 timeMock.when(LocalTime::now).thenReturn(time);
-                Node generated = logger.generateTree();
+                Object generated = logger.generateTree();
 
                 String actual = null;
                 try {
                     actual = MethodReference.NODE_EVALUATE.invoke(generated.getClass(), generated);
                 } catch (Throwable e) {
+                    if (e instanceof RuntimeException) {
+                        throw (RuntimeException) e;
+                    }
                     throw new RuntimeException(e);
                 }
                 String expected = LocalTime.now() + ": ";
@@ -69,12 +72,15 @@ public class NormalLogTest extends AdvancedLoggerTest {
 
 
         withMocks(() -> {
-            Node generated = logger.generateTree();
+            Object generated = logger.generateTree();
             String actual = null;
             try {
                 actual =
                     MethodReference.NODE_EVALUATE.<String>invoke(generated.getClass(), generated).replaceAll("\n", "");
             } catch (Throwable e) {
+                if (e instanceof RuntimeException) {
+                    throw (RuntimeException) e;
+                }
                 throw new RuntimeException(e);
             }
             String expected = Log.ANSI_ESCAPE + color + logger.message + Log.ANSI_ESCAPE + Log.ANSI_RESET;
@@ -82,7 +88,7 @@ public class NormalLogTest extends AdvancedLoggerTest {
             String finalActual = actual;
             assertEquals(
                 expected,
-                actual.substring(actual.length() - expected.length()),
+                actual.substring(Math.max(0, actual.length() - expected.length())),
                 emptyContext(),
                 r -> "The returned string does not contain the correctly colored message. The returned string was "
                     + finalActual
@@ -97,12 +103,15 @@ public class NormalLogTest extends AdvancedLoggerTest {
         logger.message = "Any\nkind\nof\nmessage";
 
         withMocks(() -> {
-            Node generated = logger.generateTree();
+            Object generated = logger.generateTree();
 
             String actual = null;
             try {
                 actual = MethodReference.NODE_EVALUATE.invoke(generated.getClass(), generated);
             } catch (Throwable e) {
+                if (e instanceof RuntimeException) {
+                    throw (RuntimeException) e;
+                }
                 throw new RuntimeException(e);
             }
             String expected = logger.message.replace("\n", ";");

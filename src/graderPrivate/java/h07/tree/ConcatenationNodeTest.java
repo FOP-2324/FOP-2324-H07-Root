@@ -42,10 +42,10 @@ public class ConcatenationNodeTest extends H07Test {
     public void testConstructor() throws Throwable {
 
         //Node
-        Object left = mock(NODE.getLink().reflection());
+        Object left = mock(NODE.getLink().reflection(), CALLS_REAL_METHODS);
 
         //Node
-        Object right = mock(NODE.getLink().reflection());
+        Object right = mock(NODE.getLink().reflection(), CALLS_REAL_METHODS);
 
         //ConditionNode
         Object node = MethodReference.CONCATENATION_NODE_CONSTRUCTOR.invoke(
@@ -73,16 +73,16 @@ public class ConcatenationNodeTest extends H07Test {
 
 
         //Node
-        Object left = mock(NODE.getLink().reflection());
-        when(MethodReference.NODE_EVALUATE.invoke(CONCATENATION_NODE.getLink().reflection(), left)).thenReturn(
+        Object left = mock(NODE.getLink().reflection(), CALLS_REAL_METHODS);
+        when(MethodReference.NODE_EVALUATE.invoke(NODE.getLink().reflection(), left)).thenReturn(
             leftNodeEvaluate);
 
         //Node
-        Object right = mock(NODE.getLink().reflection());
-        when(MethodReference.NODE_EVALUATE.invoke(CONCATENATION_NODE.getLink().reflection(), right)).thenReturn(
+        Object right = mock(NODE.getLink().reflection(), CALLS_REAL_METHODS);
+        when(MethodReference.NODE_EVALUATE.invoke(NODE.getLink().reflection(), right)).thenReturn(
             rightNodeEvaluate);
 
-        //ConditionNode
+        //ConcatenationNode
         Object node = mock(CONCATENATION_NODE.getLink().reflection(), CALLS_REAL_METHODS);
         FieldReference.CONCATENATION_NODE_LEFT.getLink().set(node, left);
         FieldReference.CONCATENATION_NODE_RIGHT.getLink().set(node, right);
@@ -90,9 +90,9 @@ public class ConcatenationNodeTest extends H07Test {
         String actual = MethodReference.NODE_EVALUATE.invoke(CONCATENATION_NODE.getLink().reflection(), node);
 
         verify(left, atLeastOnce());
-        MethodReference.NODE_EVALUATE.invoke(CONCATENATION_NODE.getLink().reflection(), left);
+        MethodReference.NODE_EVALUATE.invoke(NODE.getLink().reflection(), left);
         verify(right, atLeastOnce());
-        MethodReference.NODE_EVALUATE.invoke(CONCATENATION_NODE.getLink().reflection(), right);
+        MethodReference.NODE_EVALUATE.invoke(NODE.getLink().reflection(), right);
 
         assertEquals(
             expected,

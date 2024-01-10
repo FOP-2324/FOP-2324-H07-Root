@@ -40,11 +40,15 @@ public class MapNodeTest extends H07Test {
 
         for (Pair<Function<String, String>, String> pair : mapper) {
             //MapExpression
-            Object expression = mock(MapNodeTest.expression);
+            Object expression = mock(MapNodeTest.expression, CALLS_REAL_METHODS);
 
             strings.forEach(s -> {
                 try {
-                    when(MethodReference.MAP_EXPRESSION_MAP.invoke(MapNodeTest.expression, expression, s)).thenAnswer(
+                    when(MethodReference.MAP_EXPRESSION_MAP.invokeBestEffort(
+                        MapNodeTest.expression,
+                        expression,
+                        s
+                    )).thenAnswer(
                         invocation -> {
                             String argument = invocation.getArgument(0);
                             return pair.getLeft().apply(argument);
@@ -106,19 +110,24 @@ public class MapNodeTest extends H07Test {
         Object expression = FieldReference.MAP_NODE_MAP_EXPRESSION.getLink().get(mapNode);
 
         String actual =
-            MethodReference.MAP_EXPRESSION_MAP.invoke(MAP_EXPRESSION.getLink().reflection(), expression, testString);
+            MethodReference.MAP_EXPRESSION_MAP.invokeBestEffort(
+                MAP_EXPRESSION.getLink().reflection(),
+                expression,
+                testString
+            );
         assertEquals(
             testString,
             actual,
             emptyContext(),
             r -> "Constructor of MapNode does not set mapExpression correctly"
         );
+
     }
 
     @Test
     public void testSetMapExpression() throws Throwable {
         //MapExpression
-        Object expression = mock(MAP_EXPRESSION.getLink().reflection());
+        Object expression = mock(MAP_EXPRESSION.getLink().reflection(), CALLS_REAL_METHODS);
         //MapNode
         Object node = mock(MAP_NODE.getLink().reflection(), CALLS_REAL_METHODS);
 
@@ -131,8 +140,8 @@ public class MapNodeTest extends H07Test {
     @MethodSource("provideEvaluate")
     public void testEvaluate(Object expression, String expressionDescription, String nodeEvaluate, String expected) throws Throwable {
         //Node
-        Object node = mock(NODE.getLink().reflection());
-        when(MethodReference.NODE_EVALUATE.invoke(MAP_NODE.getLink().reflection(), node)).thenReturn(nodeEvaluate);
+        Object node = mock(NODE.getLink().reflection(), CALLS_REAL_METHODS);
+        when(MethodReference.NODE_EVALUATE.invoke(NODE.getLink().reflection(), node)).thenReturn(nodeEvaluate);
         //MapNode
         Object mapNode = mock(MAP_NODE.getLink().reflection(), CALLS_REAL_METHODS);
 

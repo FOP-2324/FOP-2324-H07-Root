@@ -1,9 +1,11 @@
 package h07;
 
+import org.mockito.Mockito;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 import org.tudalgo.algoutils.tutor.general.match.Matcher;
 import org.tudalgo.algoutils.tutor.general.reflections.*;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
 import java.util.Arrays;
 import java.util.List;
@@ -11,6 +13,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static h07.ClassReference.*;
+import static org.mockito.Mockito.mock;
 import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.*;
 import static org.tudalgo.algoutils.tutor.general.reflections.Modifier.PUBLIC;
 
@@ -136,17 +139,12 @@ public class MethodReference {
     }
 
     public WithModifiers getLink(Class<?> calledClass, Class<?>... parameters) {
-        if (constructorLink != null) {
-            return constructorLink;
-        }
-        if (methodLink != null) {
-            return methodLink;
-        }
-
         MethodLink actual = BasicTypeLink.of(calledClass).getMethod(Tests.stringMatcher(name));
         if (actual != null) {
-            if (!Set.of(parameters)
-                .equals(actual.typeList().stream().map(TypeLink::reflection).collect(Collectors.toSet()))) {
+            Set<Class<?>> actualParameters = actual.typeList().stream().map(TypeLink::reflection).collect(Collectors.toSet());
+
+            boolean hasCorrectParams = Arrays.stream(parameters).allMatch(param -> actualParameters.stream().anyMatch(actualParam -> param == null || actualParam.isAssignableFrom(param)));
+            if (parameters.length != actualParameters.size() || !hasCorrectParams) {
                 return null;
             }
             methodLink = actual;
@@ -172,18 +170,13 @@ public class MethodReference {
                     }
                 )
             );
+            constructorLink = link;
             return link;
         }
         return null;
     }
 
     public WithModifiers assertDefined(Class<?> calledClass, Class<?>... parameters) {
-        if (constructorLink != null) {
-            return constructorLink;
-        }
-        if (methodLink != null) {
-            return methodLink;
-        }
         Context context = contextBuilder()
             .add("expected class", clazz.getName())
             .add("expected kind", kind)
@@ -192,9 +185,24 @@ public class MethodReference {
             .build();
         MethodLink actual = BasicTypeLink.of(calledClass).getMethod(Tests.stringMatcher(name));
         if (actual != null) {
+
+            Set<Class<?>> actualParameters = actual.typeList().stream().map(TypeLink::reflection).collect(Collectors.toSet());
+
+            boolean hasCorrectParams = Arrays.stream(parameters).allMatch(param -> actualParameters.stream().anyMatch(actualParam -> param == null || actualParam.isAssignableFrom(param)));
+
+            context = contextBuilder()
+                .add(context)
+                .add("actual Parameters", actualParameters)
+                .build();
+
             assertEquals(
-                Set.of(parameters),
-                actual.typeList().stream().map(TypeLink::reflection).collect(Collectors.toSet()),
+                parameters.length,
+                actualParameters.size(),
+                context,
+                r -> String.format("%s does not have the right number of parameters", name)
+            );
+            assertTrue(
+                hasCorrectParams,
                 context,
                 r -> String.format("%s does not have the right parameters", name)
             );
@@ -244,7 +252,7 @@ public class MethodReference {
             r -> String.format(
                 "Can not find %s in class %s. The Method does not exist or could not be found.",
                 name,
-                clazz.getLink().name()
+                calledClass.getName()
             )
         );
     }
@@ -308,10 +316,73 @@ public class MethodReference {
             calledClass,
             Arrays.stream(parameter).map(o -> o != null ? o.getClass() : null).toArray(Class[]::new)
         );
+        if (instance == null && !(link instanceof ConstructorLink)) {
+            throw new IllegalArgumentException("Could not invoke %s.%s() as object that the function should have been called on is null.".formatted(clazz.getName(), name));
+        }
         if (link instanceof MethodLink l) {
             return l.invoke(instance, parameter);
         } else if (link instanceof ConstructorLink l) {
             return l.invoke(parameter);
+        } else {
+            return null;
+        }
+    }
+
+    public <T> T invokeBestEffort(Class<?> calledClass, Object instance, Object... parameter) throws Throwable {
+        WithModifiers link = getLink();
+
+        if (link == null) {
+            Context context = contextBuilder()
+                .add("expected class", clazz.getName())
+                .add("expected kind", kind)
+                .add("expected name", name)
+                .add("expected parameter", parameterClassNames)
+                .build();
+            fail(
+                context,
+                r -> String.format(
+                    "Can not find %s in class %s. The Method does not exist or could not be found.",
+                    name,
+                    calledClass.getName()
+                )
+            );
+        }
+
+        Class<?>[] actualParameter = ((Executable) link.reflection()).getParameterTypes();
+
+        try {
+            return invoke(calledClass, instance, parameter);
+        } catch (Throwable ignored) {
+            ignored.printStackTrace();
+        }
+        if (actualParameter.length == 0) {
+            if (link instanceof MethodLink l) {
+                return l.invoke(instance);
+            } else if (link instanceof ConstructorLink l) {
+                return l.invoke();
+            } else {
+                return null;
+            }
+        }
+
+        Object[] mocks = Arrays.stream(actualParameter)
+            .map(p -> {
+                if (p.equals(String.class)) {
+                    return "";
+                }
+                return mock(p);
+            })
+            .toArray();
+        for (int i = 0; i < parameter.length && i < mocks.length; i++) {
+            if (mocks[i].getClass().isAssignableFrom(parameter[i].getClass())) {
+                mocks[i] = parameter[i];
+            }
+        }
+
+        if (link instanceof MethodLink l) {
+            return l.invoke(instance, mocks);
+        } else if (link instanceof ConstructorLink l) {
+            return l.invoke(mocks);
         } else {
             return null;
         }
