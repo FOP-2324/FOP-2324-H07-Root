@@ -41,6 +41,15 @@ public class H07_RubricProvider implements RubricProvider {
                             JUnitTestRef.ofMethod(() -> ValueExpressionTest.class.getDeclaredMethod("testNaming"))
                         ),
                         -1
+                    ),
+                    criterion(
+                        "H1: Alle Typen wurden im korrekten Package definiert.",
+                        JUnitTestRef.and(
+                            JUnitTestRef.ofMethod(() -> ConditionExpressionTest.class.getDeclaredMethod("testPackage")),
+                            JUnitTestRef.ofMethod(() -> MapExpressionTest.class.getDeclaredMethod("testPackage")),
+                            JUnitTestRef.ofMethod(() -> ValueExpressionTest.class.getDeclaredMethod("testPackage"))
+                        ),
+                        -1
                     )
                 )
                 .minPoints(0)
@@ -67,6 +76,8 @@ public class H07_RubricProvider implements RubricProvider {
                                 JUnitTestRef.and(
                                     JUnitTestRef.ofMethod(() -> ToUpperFormatterTest.class.getDeclaredMethod(
                                         "testDefinition")),
+                                    JUnitTestRef.ofMethod(() -> ToUpperFormatterTest.class.getDeclaredMethod(
+                                        "testPackage")),
                                     JUnitTestRef.ofMethod(() -> ToUpperFormatterTest.class.getDeclaredMethod(
                                         "testNaming"))
                                 ),
@@ -242,6 +253,17 @@ public class H07_RubricProvider implements RubricProvider {
                             JUnitTestRef.ofMethod(() -> ValueNodeTest.class.getDeclaredMethod("testNaming")),
                             JUnitTestRef.ofMethod(() -> MapNodeTest.class.getDeclaredMethod("testNaming")),
                             JUnitTestRef.ofMethod(() -> ConditionNodeTest.class.getDeclaredMethod("testNaming"))
+                        ),
+                        -1
+                    ),
+                    criterion(
+                        "H3: Alle Typen wurden im korrekten Package definiert.",
+                        JUnitTestRef.and(
+                            JUnitTestRef.ofMethod(() -> NodeTest.class.getDeclaredMethod("testPackage")),
+                            JUnitTestRef.ofMethod(() -> ConcatenationNodeTest.class.getDeclaredMethod("testPackage")),
+                            JUnitTestRef.ofMethod(() -> ValueNodeTest.class.getDeclaredMethod("testPackage")),
+                            JUnitTestRef.ofMethod(() -> MapNodeTest.class.getDeclaredMethod("testPackage")),
+                            JUnitTestRef.ofMethod(() -> ConditionNodeTest.class.getDeclaredMethod("testPackage"))
                         ),
                         -1
                     )

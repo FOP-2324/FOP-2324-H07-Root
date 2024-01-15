@@ -46,6 +46,11 @@ public class ToUpperFormatterTest {
     }
 
     @Test
+    public void testPackage() {
+        ClassReference.TO_UPPER_FORMATTER.assertDefinedInCorrectPackage();
+    }
+
+    @Test
     public void testMap() {
 
         assertNotNull(EXERCISE_METHOD, emptyContext(), r -> "Could not find method map().");

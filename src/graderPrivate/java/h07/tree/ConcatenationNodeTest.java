@@ -39,6 +39,11 @@ public class ConcatenationNodeTest extends H07Test {
     }
 
     @Test
+    public void testPackage() {
+        CONCATENATION_NODE.assertDefinedInCorrectPackage();
+    }
+
+    @Test
     public void testConstructor() throws Throwable {
 
         //Node

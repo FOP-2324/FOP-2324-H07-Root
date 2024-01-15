@@ -19,4 +19,9 @@ public class ConditionExpressionTest {
         ClassReference.CONDITION_EXPRESSION.assertNamedCorrectly();
         MethodReference.CONDITION_EXPRESSION_CHECK.assertNamedCorrectly();
     }
+
+    @Test
+    public void testPackage() {
+        ClassReference.CONDITION_EXPRESSION.assertDefinedInCorrectPackage();
+    }
 }

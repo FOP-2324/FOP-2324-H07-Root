@@ -47,6 +47,11 @@ public class ValueNodeTest extends H07Test {
     }
 
     @Test
+    public void testPackage() {
+        VALUE_NODE.assertDefinedInCorrectPackage();
+    }
+
+    @Test
     public void testEvaluateDefault() throws Throwable {
 
         Object node = VALUE_NODE.getLink().reflection().getConstructor().newInstance();

@@ -93,6 +93,11 @@ public class MapNodeTest extends H07Test {
         FieldReference.MAP_NODE_MAP_EXPRESSION.assertNamedCorrectly();
     }
 
+    @Test
+    public void testPackage() {
+        MAP_NODE.assertDefinedInCorrectPackage();
+    }
+
     @ParameterizedTest
     @ValueSource(strings = {"", "test", "Some String", "SomeStringInCamelCase"})
     public void testConstructor(String testString) throws Throwable {

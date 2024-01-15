@@ -130,12 +130,6 @@ public class ClassReference {
             .build();
 
         assertNotNull(link, context, r -> "Could not find class %s.".formatted(name));
-        assertEquals(
-            pack,
-            link.reflection().getPackage().getName(),
-            context,
-            r -> "Package name does not match expected package name."
-        );
         assertEquals(kind, link.kind(), context, r -> "Kind does not match expected kind.");
         assertTrue(
             Arrays.stream(modifiers).allMatch(m -> m.is(link.modifiers())),
@@ -155,6 +149,27 @@ public class ClassReference {
 
         assertNotNull(link, context, r -> "Could not find class %s.".formatted(name));
         assertEquals(name, link.name(), context, r -> "The name of the Type does not match the expected name.");
+    }
+
+    public void assertDefinedInCorrectPackage() {
+        assertDefined();
+        Context context = contextBuilder()
+            .add("expected package", pack)
+            .add("expected kind", kind)
+            .add("expected name", name)
+            .add("expected modifier", Arrays.stream(modifiers).map(Modifier::keyword).collect(Collectors.joining(", ")))
+            .add("package", link.reflection().getPackage().getName())
+            .add("kind", link.kind())
+            .add("name", link.name())
+            .build();
+
+        assertNotNull(link, context, r -> "Could not find class %s.".formatted(name));
+        assertEquals(
+            pack,
+            link.reflection().getPackage().getName(),
+            context,
+            r -> "Package name does not match expected package name."
+        );
     }
 
     public BasicTypeLink getLink() {

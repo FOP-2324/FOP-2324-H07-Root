@@ -19,4 +19,9 @@ public class ValueExpressionTest {
         ClassReference.VALUE_EXPRESSION.assertNamedCorrectly();
         MethodReference.VALUE_EXPRESSION_GET.assertNamedCorrectly();
     }
+
+    @Test
+    public void testPackage() {
+        ClassReference.VALUE_EXPRESSION.assertDefinedInCorrectPackage();
+    }
 }

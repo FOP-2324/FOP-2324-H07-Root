@@ -19,4 +19,9 @@ public class NodeTest {
         ClassReference.NODE.assertNamedCorrectly();
         MethodReference.NODE_EVALUATE.assertNamedCorrectly();
     }
+
+    @Test
+    public void testPackage() {
+        ClassReference.NODE.assertDefinedInCorrectPackage();
+    }
 }

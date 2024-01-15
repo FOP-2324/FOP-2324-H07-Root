@@ -35,6 +35,11 @@ public class ConditionNodeTest extends H07Test {
         CONDITION_NODE_CONDITION_EXPRESSION.assertNamedCorrectly();
     }
 
+    @Test
+    public void testPackage() {
+        CONDITION_NODE.assertDefinedInCorrectPackage();
+    }
+
     @ParameterizedTest
     @ValueSource(strings = {"expected", "false", "value", "stringy"})
     public void testConstructor(String input) throws Throwable {

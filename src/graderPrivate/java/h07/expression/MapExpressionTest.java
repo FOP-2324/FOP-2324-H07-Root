@@ -19,4 +19,9 @@ public class MapExpressionTest {
         ClassReference.MAP_EXPRESSION.assertNamedCorrectly();
         MethodReference.MAP_EXPRESSION_MAP.assertNamedCorrectly();
     }
+
+    @Test
+    public void testPackage() {
+        ClassReference.MAP_EXPRESSION.assertDefinedInCorrectPackage();
+    }
 }
